@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhangxin.mybatis.mapper.DownloadMapper">
+  <resultMap id="BaseResultMap" type="com.zhangxin.mybatis.model.Download">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="d_id" jdbcType="BIGINT" property="dId" />
+    <result column="s_Id" jdbcType="BIGINT" property="sId" />
+    <result column="c_Id" jdbcType="BIGINT" property="cId" />
+    <result column="d_create_date" jdbcType="TIMESTAMP" property="dCreateDate" />
+  </resultMap>
+</mapper>

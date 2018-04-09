@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhangxin.mybatis.mapper.MessageMapper">
+  <resultMap id="BaseResultMap" type="com.zhangxin.mybatis.model.Message">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="m_Id" jdbcType="BIGINT" property="mId" />
+    <result column="member_Id" jdbcType="BIGINT" property="memberId" />
+    <result column="c_iD" jdbcType="BIGINT" property="cId" />
+    <result column="r_Id" jdbcType="BIGINT" property="rId" />
+    <result column="m_content" jdbcType="VARCHAR" property="mContent" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="m_create_date" jdbcType="TIMESTAMP" property="mCreateDate" />
+  </resultMap>
+</mapper>

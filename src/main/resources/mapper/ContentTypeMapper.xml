@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhangxin.mybatis.mapper.ContentTypeMapper">
+  <resultMap id="BaseResultMap" type="com.zhangxin.mybatis.model.ContentType">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="c_type_id" jdbcType="BIGINT" property="cTypeId" />
+    <result column="t_id" jdbcType="BIGINT" property="tId" />
+    <result column="c_id" jdbcType="BIGINT" property="cId" />
+  </resultMap>
+</mapper>

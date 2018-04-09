@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhangxin.mybatis.mapper.MemberMapper">
+  <resultMap id="BaseResultMap" type="com.zhangxin.mybatis.model.Member">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="m_Id" jdbcType="BIGINT" property="mId" />
+    <result column="m_email" jdbcType="VARCHAR" property="mEmail" />
+    <result column="m_phone" jdbcType="VARCHAR" property="mPhone" />
+    <result column="m_password" jdbcType="VARCHAR" property="mPassword" />
+    <result column="m_create_date" jdbcType="TIMESTAMP" property="mCreateDate" />
+    <result column="m_type" jdbcType="INTEGER" property="mType" />
+  </resultMap>
+  
+  
+  <select id="selectByMember" resultMap="BaseResultMap">
+    select m_Id,m_email,m_phone,m_password,m_create_date,m_type from member
+    <where>
+      <if test="mEmail != null and mEmail != ''">
+        m_email like concat('%',concat(#{mEmail}, '%'))
+      </if>
+      <if test="mPhone != null and mPhone != ''">
+        and m_phone like concat('%',concat(#{mPhone}, '%'))
+      </if>
+    </where>
+
+  </select>
+  
+  
+</mapper>
