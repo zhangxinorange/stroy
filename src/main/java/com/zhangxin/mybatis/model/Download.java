@@ -2,7 +2,11 @@ package com.zhangxin.mybatis.model;
 
 import java.util.Date;
 import javax.persistence.*;
-
+/***
+ * 下载量
+ * @author pc
+ *
+ */
 @Table(name = "download")
 public class Download {
     @Id

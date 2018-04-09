@@ -1,5 +1,7 @@
 package com.zhangxin.mybatis.model;
-
+/****
+ * 销售内容
+ */
 import java.util.Date;
 import javax.persistence.*;
 

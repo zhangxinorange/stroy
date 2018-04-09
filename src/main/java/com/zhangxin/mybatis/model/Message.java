@@ -2,7 +2,11 @@ package com.zhangxin.mybatis.model;
 
 import java.util.Date;
 import javax.persistence.*;
-
+/****
+ * 留言版
+ * @author pc
+ *
+ */
 @Table(name = "message")
 public class Message {
     @Column(name = "m_Id")

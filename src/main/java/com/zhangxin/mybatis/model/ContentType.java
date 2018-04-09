@@ -1,7 +1,11 @@
 package com.zhangxin.mybatis.model;
 
 import javax.persistence.*;
-
+/***
+ * 小说类型关联表
+ * @author pc
+ *
+ */
 @Table(name = "content_type")
 public class ContentType {
     @Id

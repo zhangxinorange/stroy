@@ -2,7 +2,11 @@ package com.zhangxin.mybatis.model;
 
 import java.util.Date;
 import javax.persistence.*;
-
+/***
+ * 读取人关联
+ * @author pc
+ *
+ */
 @Table(name = "read")
 public class Read {
     @Id

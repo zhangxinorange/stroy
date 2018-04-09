@@ -2,7 +2,11 @@ package com.zhangxin.mybatis.model;
 
 import java.util.Date;
 import javax.persistence.*;
-
+/***
+ * 会员管理
+ * @author pc
+ *
+ */
 @Table(name = "member")
 public class Member {
     @Id
