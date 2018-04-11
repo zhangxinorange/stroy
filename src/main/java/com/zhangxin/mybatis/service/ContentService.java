@@ -2,10 +2,8 @@ package com.zhangxin.mybatis.service;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import com.zhangxin.mybatis.model.Content;
-import com.zhangxin.mybatis.model.ContentTemp;
+import com.zhangxin.mybatis.util.Result;
 
 public interface ContentService extends IService<Content> {
 	  /**
@@ -17,4 +15,6 @@ public interface ContentService extends IService<Content> {
      * @return
      */
     List<Content> selectByContent(Content content, int page, int rows);
+    
+    Result deteteContent(Long cId);
 }

@@ -101,6 +101,7 @@
 										<tr>
 											<th>小说名称</th>
 											<th>小说作者</th>
+											<th>类型</th>
 											<th>简介</th>
 											<th>标题图</th>
 											<th>文章内容</th>
@@ -112,11 +113,12 @@
 											<tr class="gradeA">
 												<td>${content.cTitle}</td>
 												<td>${content.cAuthor}</td>
+												<td>${content.typeStr}</td>
 												<td>${content.cDesc}</td>
 												<td style="text-align: center;"><img alt=""
 													style="height: 50px;" src="${ctx }/${content.cPicStr}">
 												</td>
-												<td><c:if test="${fn:length(content.detail)>12 }">  
+												<td style="width: 20%"><c:if test="${fn:length(content.detail)>12 }">  
 								                         ${fn:substring(content.detail, 0, 12)}...  
 								                   </c:if> <c:if test="${fn:length(content.detail)<=12 }">  
 								                         ${content.detail }  
@@ -124,7 +126,7 @@
                   								</td>
 												<td style="text-align: center;">[<a
 													href="${ctx}/stroy/edit?cId=${content.cId}">修改</a>] - [<a
-													href="${ctx}/stroy/delete?cId=${content.cId}">删除</a>]
+													href="javascript:deleteContent('${content.cId}');">删除</a>]
 												</td>
 											</tr>
 										</c:forEach>
@@ -184,6 +186,13 @@
 		$(function() {
 
 		});
+		function deleteContent(id)
+		{
+			confirm("删除会导致文章评论、阅读量、下载量清空，确认删除吗？")
+			{
+				window.location.href="${ctx}/stroy/delete?cId="+id;
+			}
+		}
 	</script>
 </body>
 

@@ -5,8 +5,6 @@
 <html>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <c:set var="user" value="<%=request.getSession().getAttribute(StroyContants.ADMIN_SESSION_KEY) %>" />
-<html>
-    
     <head>
         <title>Forms</title>
         <!-- Bootstrap -->
@@ -17,8 +15,8 @@
         <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
         <!--[if lt IE 9]>
             <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]
-        <script src="vendors/modernizr-2.6.2-respond-1.1.0.min.js"></script>-->
+        <![endif]-->
+        <script src="${ctx }/static/vendors/modernizr-2.6.2-respond-1.1.0.min.js"></script>
     </head>
     
     <body>
@@ -106,6 +104,23 @@
                                           </div>
                                         </div>
                                          <div class="control-group">
+                                          <label class="control-label" for="multiSelect">文章类别</label>
+                                          <div class="controls">
+                                            <select multiple="multiple" id="multiSelect"  class="chzn-select span4">
+                                            	<c:forEach items="${tList }" var="type">
+                                            		<option value="${type.tId }">${type.tName }</option>
+                                            	</c:forEach>
+                                            </select>
+                                            <input type="hidden" name="tType" id="tType">
+                                            <p class="help-block">可选择多种类别</p>
+                                          </div>
+
+                                        </div>
+                                        
+                                        
+                                        
+                                        
+                                         <div class="control-group">
                                           <label class="control-label" for="fileInput">标题图</label>
                                           <div class="controls">
                                             <input class="input-file uniform_on" id="fileInput" name="cPic" type="file">
@@ -145,7 +160,7 @@
         </div>
         <!--/.fluid-container-->
         <link href="${ctx }/static/vendors/uniform.default.css" rel="stylesheet" media="screen">
-
+		<link href="${ctx }/static/vendors/chosen.min.css" rel="stylesheet" media="screen">
         <link href="${ctx }/static/vendors/wysiwyg/bootstrap-wysihtml5.css" rel="stylesheet" media="screen">
 
         <script src="${ctx }/static/vendors/jquery-1.9.1.js"></script>
@@ -200,10 +215,17 @@
             $(".btn-primary").click(function(){
             	var title =$("#cTitle").val();
             	if(title=="")
-            		{
-            		alert("文章标题不能为空");
-            		return;
-            		}
+           		{
+	           		alert("文章标题不能为空");
+	           		return;
+           		}
+            	
+            	var selected = [];
+            	$("#multiSelect").each(function () {
+            		selected.push($(this).val());
+            	});
+            	$("#tType").val(selected);
+            	
             	$(".form-horizontal").submit();
             });
         });

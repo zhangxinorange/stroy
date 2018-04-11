@@ -105,6 +105,23 @@
                                             <input class="input-xlarge focused" id="cDesc" name="cDesc" type="text" value="${content.cDesc }">
                                           </div>
                                         </div>
+                                        
+                                        
+                                        <div class="control-group">
+                                          <label class="control-label" for="multiSelect">文章类别</label>
+                                          <div class="controls">
+                                            <select multiple="multiple" id="multiSelect"  class="chzn-select span4">
+                                            	<c:forEach items="${tList }" var="type">
+                                            		<option value="${type.tId }">${type.tName }</option>
+                                            	</c:forEach>
+                                            </select>
+                                            <input type="hidden" name="tType" id="tType">
+                                            <p class="help-block">可选择多种类别</p>
+                                          </div>
+
+                                        </div>
+                                        
+                                        
                                          <div class="control-group">
                                           <label class="control-label" for="fileInput">标题图</label>
                                           <div class="controls">
@@ -148,7 +165,7 @@
         </div>
         <!--/.fluid-container-->
         <link href="${ctx }/static/vendors/uniform.default.css" rel="stylesheet" media="screen">
-
+		<link href="${ctx }/static/vendors/chosen.min.css" rel="stylesheet" media="screen">
         <link href="${ctx }/static/vendors/wysiwyg/bootstrap-wysihtml5.css" rel="stylesheet" media="screen">
 
         <script src="${ctx }/static/vendors/jquery-1.9.1.js"></script>
@@ -200,6 +217,20 @@
             });
             
             
+            if('${tvalue}'!='')
+           	{
+            	var sjon='${tvalue}';
+            	var obj = eval ("(" + sjon + ")");
+
+            	
+                for (var i in obj) {
+                    $(".chzn-select option[value='" + obj[i].tId + "'] ").attr("selected", true);
+                }
+                $(".chzn-select").trigger("liszt:updated");
+                $(".chzn-select").chosen();
+           	}
+           
+            
             $(".btn-primary").click(function(){
             	var title =$("#cTitle").val();
             	if(title=="")
@@ -207,6 +238,11 @@
             		alert("文章标题不能为空");
             		return;
             		}
+            	var selected = [];
+            	$("#multiSelect").each(function () {
+            		selected.push($(this).val());
+            	});
+            	$("#tType").val(selected);
             	$(".form-horizontal").submit();
             });
         });

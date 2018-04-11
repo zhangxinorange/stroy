@@ -74,4 +74,17 @@ public class ContentType {
     public void setcId(Long cId) {
         this.cId = cId;
     }
+
+	public ContentType() {
+		super();
+	}
+
+	public ContentType(Long cId) {
+		super();
+		this.cId = cId;
+	}
+
+	
+    
+    
 }

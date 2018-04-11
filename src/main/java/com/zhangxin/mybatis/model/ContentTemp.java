@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 
+import com.zhangxin.mybatis.util.StringUtil;
+
 public class ContentTemp {
 
 	private Long cId;
@@ -169,12 +171,23 @@ public class ContentTemp {
 	private String detail;
 
 	public String getDetail() {
-		return detail;
+		return StringUtil.delHtmlTag(detail);
 	}
 
 	public void setDetail(String detail) {
 		this.detail = detail;
 	}
+	
+	private String typeStr;
+
+	public String getTypeStr() {
+		return typeStr;
+	}
+
+	public void setTypeStr(String typeStr) {
+		this.typeStr = typeStr;
+	}
+	
 	
 	
 }

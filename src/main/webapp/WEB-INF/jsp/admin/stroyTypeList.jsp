@@ -90,7 +90,7 @@
 								<div class="table-toolbar">
 									<div class="btn-group">
 										<a
-											href="javascript:window.location.href='${ctx }/stroy/viewStroy'"><button
+											href="javascript:window.location.href='${ctx }/type/add'"><button
 												class="btn btn-success">
 												新增类别 <i class="icon-plus icon-white"></i>
 											</button></a>
@@ -106,13 +106,13 @@
 										</tr>
 									</thead>
 									<tbody>
-										<c:forEach items="${pageinfo.list}" var="type">
+										<c:forEach items="${pageInfo.list}" var="type">
 											<tr class="gradeA">
 												<td>${type.tName}</td>
 												<td><fmt:formatDate value="${type.tCreateDate}" pattern="yyyy-MM-dd" /></td>
 												<td style="text-align: center;">[<a
-													href="${ctx}/stroy/edit?cId=${content.cId}">修改</a>] - [<a
-													href="${ctx}/stroy/delete?cId=${content.cId}">删除</a>]
+													href="${ctx}/type/edit?tId=${type.tId}">修改</a>] - [<a
+													href="javascript:deleteType('${type.tId}');">删除</a>]
 												</td>
 											</tr>
 										</c:forEach>
@@ -172,6 +172,13 @@
 		$(function() {
 
 		});
+		function deleteType(id)
+		{
+			confirm("删除会导致文章文章的类别消失，确认删除吗？")
+			{
+				window.location.href="${ctx}/type/delete?tId="+id;
+			}
+		}
 	</script>
 </body>
 

@@ -7,8 +7,8 @@ import javax.persistence.*;
  * @author pc
  *
  */
-@Table(name = "read")
-public class Read {
+@Table(name = "readContent")
+public class ReadContent {
     @Id
     @Column(name = "r_iD")
     @GeneratedValue(generator = "JDBC")

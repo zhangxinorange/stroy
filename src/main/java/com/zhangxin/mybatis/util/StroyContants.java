@@ -7,4 +7,7 @@ public class StroyContants {
 	
 	
 	public final static String FILE_DIR="fileDir";
+	
+	
+	public final static String DEFAULT_ROW="10";
 }

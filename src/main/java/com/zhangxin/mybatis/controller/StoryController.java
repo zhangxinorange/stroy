@@ -1,5 +1,7 @@
 package com.zhangxin.mybatis.controller;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -24,7 +26,12 @@ import org.springframework.web.servlet.ModelAndView;
 import com.github.pagehelper.PageInfo;
 import com.zhangxin.mybatis.model.Content;
 import com.zhangxin.mybatis.model.ContentTemp;
+import com.zhangxin.mybatis.model.ContentType;
+import com.zhangxin.mybatis.model.Type;
 import com.zhangxin.mybatis.service.ContentService;
+import com.zhangxin.mybatis.service.ContentTypeService;
+import com.zhangxin.mybatis.service.ITypeService;
+import com.zhangxin.mybatis.util.JsonLibUtils;
 import com.zhangxin.mybatis.util.StroyContants;
 
 @Controller
@@ -33,11 +40,17 @@ public class StoryController {
 
 	@Autowired
 	private ContentService contentService;
+	
+	@Autowired
+	private ITypeService typeService;
+	
+	@Autowired
+	private ContentTypeService contentTypeService;
 
 	@RequestMapping(value = "/list")
 	public ModelAndView getStroyList(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(required = false, defaultValue = "1") int page,
-			@RequestParam(required = false, defaultValue = "1") int rows, Content content) {
+			@RequestParam(required = false, defaultValue = StroyContants.DEFAULT_ROW) int rows, Content content) {
 
 		// return "/admin/stroyList";
 		ModelAndView result = new ModelAndView("/admin/stroyList");
@@ -59,12 +72,13 @@ public class StoryController {
 			Content content = contentService.selectByKey(sId);
 			map.addAttribute("content", content);
 		}
-
+		List<Type> tList=typeService.selectAll();
+		map.put("tList", tList);
 		return "/admin/addStroy";
 	}
 	
 	@RequestMapping(value="/edit",method=RequestMethod.GET)
-	public ModelAndView gotoEdit(HttpServletRequest request,HttpServletResponse response,Long cId,ModelMap map)
+	public ModelAndView gotoEdit(HttpServletRequest request,HttpServletResponse response,Long cId,ModelMap map) 
 	{
 		Content content=contentService.selectByKey(cId);
 		ContentTemp testB = new ContentTemp();
@@ -72,13 +86,26 @@ public class StoryController {
 		testB.setDetail(new String(testB.getcContent()));
 		ModelAndView result = new ModelAndView("/admin/editStroy");
 		result.addObject("content", testB);
+		List<Type> tList=typeService.selectAll();
+		result.addObject("tList", tList);
+		ContentType ct=new ContentType(cId);
+		List<ContentType> ctList=contentTypeService.selectByT(ct);
+		if (ctList!=null&&ctList.size()>0) {
+			List<Type> tyList=new ArrayList<>();
+			for (ContentType contentType : ctList) {
+				long tId=contentType.gettId();
+				Type type=typeService.selectByKey(tId);
+				tyList.add(type);
+			}
+			result.addObject("tvalue", JsonLibUtils.bean2Json(tyList));
+		}
 		
 		return result;
 	}
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public String save(HttpServletRequest request, HttpServletResponse response, String cTitle, String cAuthor,
-			String cDesc, String cContent, MultipartFile cPic) throws Exception {
+			String cDesc, String cContent, MultipartFile cPic,String tType) throws Exception {
 		Content content = new Content(cTitle, cAuthor, cDesc);
 		if (!cPic.isEmpty() && cPic != null && cPic.getBytes() != null) {
 			content.setcPic(cPic.getBytes());
@@ -107,13 +134,14 @@ public class StoryController {
 			content.setcContent(cContent.getBytes());
 		}
 		contentService.save(content);
+		contentTypeService.saveMany(content.getcId(), tType);
 		return "redirect:/stroy/list";
 	}
 	
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String update(HttpServletRequest request, HttpServletResponse response, String cTitle, String cAuthor,
-			String cDesc, String cContent, MultipartFile cPic,Long cId) throws Exception {
+			String cDesc, String cContent, MultipartFile cPic,Long cId,String tType) throws Exception {
 		Content content = new Content(cId,cTitle, cAuthor, cDesc);
 		if (!cPic.isEmpty() && cPic != null && cPic.getBytes() != null) {
 			content.setcPic(cPic.getBytes());
@@ -141,7 +169,16 @@ public class StoryController {
 		if (cContent != null) {
 			content.setcContent(cContent.getBytes());
 		}
-		contentService.updateAll(content);
+		contentService.updateNotNull(content);
+		contentTypeService.saveMany(content.getcId(), tType);
+		return "redirect:/stroy/list";
+	}
+	
+	
+	
+	@RequestMapping(value = "/delete", method = RequestMethod.GET)
+	public String delete(Long cId) throws Exception {
+		contentService.deteteContent(cId);
 		return "redirect:/stroy/list";
 	}
 	
@@ -150,11 +187,27 @@ public class StoryController {
 		List<ContentTemp> list = new ArrayList<>();
 		if (lst != null && lst.size() > 0) {
 			for (Content con : lst) {
+				ContentType type=new ContentType();
+				type.setcId(con.getcId());
+				List<ContentType> ctList=contentTypeService.selectByT(type);
+				StringBuffer tyepStr=new StringBuffer();
+				if (ctList!=null&&ctList.size()>0) {
+					for (ContentType contentType : ctList) {
+						//tyepStr.append(contentType.get)
+						String name=typeService.selectByKey(contentType.gettId()).gettName();
+						tyepStr.append(name).append(",");
+					}
+					tyepStr=tyepStr.deleteCharAt(tyepStr.length()-1);
+				}
+				
+				
+				
 				ContentTemp testB = new ContentTemp();
 				BeanUtils.copyProperties(con, testB);
 				if (testB.getcContent() != null) {
 					testB.setDetail(new String(testB.getcContent()));
 				}
+				testB.setTypeStr(tyepStr.toString());
 				if (testB.getcPicStr() != null && testB.getcPic() != null) {
 					String puff=request.getSession().getServletContext().getRealPath(StroyContants.FILE_DIR);
 					String real = puff.substring(0, puff.indexOf(StroyContants.FILE_DIR)-1) + testB.getcPicStr();
