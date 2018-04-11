@@ -13,4 +13,22 @@
     <result column="c_content" jdbcType="LONGVARBINARY" property="cContent" />
     <result column="c_pic" jdbcType="LONGVARBINARY" property="cPic" />
   </resultMap>
+  
+  <select id="selectByContent" resultMap="BaseResultMap">
+    select c.* from content c left join content_type s on s.c_id=c.c_id
+    <where>
+      <if test="cTitle != null and cTitle != ''">
+        c_title like concat('%',concat(#{cTitle}, '%'))
+      </if>
+      <if test="cAuthor != null and cAuthor != ''">
+        and c_Author like concat('%',concat(#{cAuthor}, '%'))
+      </if>
+      <if test="type != null and type != ''">
+        and s.t_id =#{type}
+      </if>
+    </where>
+	order by c.c_title;
+  </select>
+  
+  
 </mapper>

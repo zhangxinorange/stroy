@@ -169,4 +169,37 @@ public class Content {
     public void setcPic(byte[] cPic) {
         this.cPic = cPic;
     }
+	public Content() {
+		super();
+	}
+
+	public Content(String cTitle, String cAuthor, String cDesc) {
+		super();
+		this.cTitle = cTitle;
+		this.cAuthor = cAuthor;
+		this.cDesc = cDesc;
+	}
+	/***
+	 * 小说标题图
+	 */
+	@Column(name = "c_picStr")
+    private String cPicStr;
+
+	public String getcPicStr() {
+		return cPicStr;
+	}
+
+	public void setcPicStr(String cPicStr) {
+		this.cPicStr = cPicStr;
+	}
+
+	public Content(Long cId, String cTitle, String cAuthor, String cDesc) {
+		super();
+		this.cId = cId;
+		this.cTitle = cTitle;
+		this.cAuthor = cAuthor;
+		this.cDesc = cDesc;
+	}
+    
+    
 }

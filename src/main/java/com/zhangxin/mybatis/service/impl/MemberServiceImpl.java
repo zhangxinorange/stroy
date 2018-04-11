@@ -2,9 +2,11 @@ package com.zhangxin.mybatis.service.impl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.PageHelper;
+import com.zhangxin.mybatis.mapper.MemberMapper;
 import com.zhangxin.mybatis.model.Member;
 import com.zhangxin.mybatis.service.MemberService;
 
@@ -13,6 +15,9 @@ import tk.mybatis.mapper.util.StringUtil;
 
 @Service
 public class MemberServiceImpl extends BaseService<Member> implements MemberService{
+	
+	@Autowired
+	private MemberMapper memberMapper;
 
 	@Override
 	public List<Member> selectAllMember(Member member, int page, int row) {
@@ -27,6 +32,12 @@ public class MemberServiceImpl extends BaseService<Member> implements MemberServ
         //分页查询
         PageHelper.startPage(page, row);
         return selectByExample(example);
+	}
+
+	@Override
+	public List<Member> selectMember(Member member) {
+		List<Member> lst=memberMapper.select(member);
+		return lst;
 	}
 
 }

@@ -1,0 +1,10 @@
+package com.zhangxin.mybatis.util;
+
+public class StroyContants {
+	public final static String ADMIN_SESSION_KEY="adminSession";
+	
+	public final static String USER_SESSION_key="userSession";
+	
+	
+	public final static String FILE_DIR="fileDir";
+}
