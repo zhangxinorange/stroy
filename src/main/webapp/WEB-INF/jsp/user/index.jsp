@@ -31,7 +31,16 @@
 		<div class="swiper-container">
 			<!--banner图懒加载 data.src-->
 			<div class="swiper-wrapper">
-				<div class="swiper-slide">
+				<c:forEach items="${lunbo }" var="content">
+					<div class="swiper-slide">
+					<img data-src="${ctx}/${content.cPicStr}" alt=""
+						class="img-bespread swiper-lazy" style="width: 100%;height: 100%;"/>
+					<div class="swiper-lazy-preloader"></div>
+				</div>
+				
+				</c:forEach>
+				
+				<%-- <div class="swiper-slide">
 					<img data-src="${ctx}/static/images/banner.jpg" alt=""
 						class="img-bespread swiper-lazy" />
 					<div class="swiper-lazy-preloader"></div>
@@ -40,12 +49,7 @@
 					<img data-src="${ctx}/static/images/banner.jpg" alt=""
 						class="img-bespread swiper-lazy" />
 					<div class="swiper-lazy-preloader"></div>
-				</div>
-				<div class="swiper-slide">
-					<img data-src="${ctx}/static/images/banner.jpg" alt=""
-						class="img-bespread swiper-lazy" />
-					<div class="swiper-lazy-preloader"></div>
-				</div>
+				</div> --%>
 			</div>
 			<div class="swiper-pagination"></div>
 		</div>

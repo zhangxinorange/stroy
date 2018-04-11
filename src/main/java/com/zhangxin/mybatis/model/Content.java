@@ -34,6 +34,7 @@ public class Content {
      * 小说创建时间
      */
     @Column(name = "c_create_date")
+    @OrderBy("desc")
     private Date cCreateDate;
 
     /**
