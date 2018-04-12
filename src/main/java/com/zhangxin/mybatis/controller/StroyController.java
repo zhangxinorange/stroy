@@ -36,7 +36,7 @@ import com.zhangxin.mybatis.util.StroyContants;
 
 @Controller
 @RequestMapping(value = "/stroy")
-public class StoryController {
+public class StroyController {
 
 	@Autowired
 	private ContentService contentService;
@@ -105,8 +105,8 @@ public class StoryController {
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public String save(HttpServletRequest request, HttpServletResponse response, String cTitle, String cAuthor,
-			String cDesc, String cContent, MultipartFile cPic,String tType) throws Exception {
-		Content content = new Content(cTitle, cAuthor, cDesc);
+			String cDesc, String cContent, MultipartFile cPic,String tType,Long cAdmin) throws Exception {
+		Content content = new Content(cTitle, cAuthor, cDesc,cAdmin);
 		if (!cPic.isEmpty() && cPic != null && cPic.getBytes() != null) {
 			content.setcPic(cPic.getBytes());
 
@@ -141,8 +141,8 @@ public class StoryController {
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String update(HttpServletRequest request, HttpServletResponse response, String cTitle, String cAuthor,
-			String cDesc, String cContent, MultipartFile cPic,Long cId,String tType) throws Exception {
-		Content content = new Content(cId,cTitle, cAuthor, cDesc);
+			String cDesc, String cContent, MultipartFile cPic,Long cId,String tType,Long cAdmin) throws Exception {
+		Content content = new Content(cId,cTitle, cAuthor, cDesc,cAdmin);
 		if (!cPic.isEmpty() && cPic != null && cPic.getBytes() != null) {
 			content.setcPic(cPic.getBytes());
 
@@ -206,6 +206,14 @@ public class StoryController {
 				BeanUtils.copyProperties(con, testB);
 				if (testB.getcContent() != null) {
 					testB.setDetail(new String(testB.getcContent()));
+				}
+				if (testB.getcAdmin()!=null) {
+					if (testB.getcAdmin().equals(Long.valueOf(0))) {
+						testB.setAdminStr("否");
+					}
+					else {
+						testB.setAdminStr("是");
+					}
 				}
 				testB.setTypeStr(tyepStr.toString());
 				if (testB.getcPicStr() != null && testB.getcPic() != null) {

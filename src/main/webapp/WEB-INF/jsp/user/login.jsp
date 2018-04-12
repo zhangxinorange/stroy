@@ -1,3 +1,7 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,9 +9,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="format-detection" content="telephone=no"/>
     <title>主页</title>
-    <link rel="stylesheet" href="fonts/iconfont.css"/>
-    <link rel="stylesheet" href="css/style.min.css">
-    <script src="js/loading.js"></script>
+    <link rel="stylesheet" href="${ctx }/static/fonts/iconfont.css"/>
+    <link rel="stylesheet" href="${ctx }/static/css/style.min.css">
+    <script src="${ctx }/static/js/loading.js"></script>
 </head>
 <body>
 <header class="header flex flex-vc">
@@ -42,8 +46,8 @@
     </ul>
 </div>
 </body>
-<script src="js/jquery.min.js"></script>
-<script src="js/script.js"></script>
+<script src="${ctx }/static/js/jquery.min.js"></script>
+<script src="${ctx }/static/js/script.js"></script>
 <script>
 </script>
 </html>

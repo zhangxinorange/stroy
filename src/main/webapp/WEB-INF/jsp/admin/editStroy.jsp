@@ -93,6 +93,20 @@
                                             <input class="input-xlarge focused" id="cTitle" name="cTitle" type="text" value="${content.cTitle }">
                                           </div>
                                         </div>
+                                        
+                                        <div class="control-group">
+											<label class="control-label" for="focusedInput">是否下载阅读</label> 
+											<div class="controls">
+												<input class="input-xlarge focused" 
+													name="cAdmin" type="radio" value="0" <c:if test="${content.cAdmin eq 0 }">checked="checked"</c:if> />否
+													&nbsp;
+												<input class="input-xlarge focused" 
+													name="cAdmin" type="radio" value="1" <c:if test="${content.cAdmin eq 1 }">checked="checked"</c:if>/>是
+											</div>
+											
+										</div>
+                                        
+                                        
                                         <div class="control-group">
                                           <label class="control-label" for="focusedInput">文章作者</label>
                                           <div class="controls">

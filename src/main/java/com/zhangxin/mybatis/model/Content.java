@@ -3,7 +3,15 @@ package com.zhangxin.mybatis.model;
  * 销售内容
  */
 import java.util.Date;
-import javax.persistence.*;
+
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OrderBy;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.zhangxin.mybatis.util.CustomDateSerializer;
 
 @Table(name = "content")
 public class Content {
@@ -122,6 +130,7 @@ public class Content {
      *
      * @return c_create_date - 小说创建时间
      */
+    @JsonSerialize(using = CustomDateSerializer.class) 
     public Date getcCreateDate() {
         return cCreateDate;
     }
@@ -201,6 +210,36 @@ public class Content {
 		this.cAuthor = cAuthor;
 		this.cDesc = cDesc;
 	}
+	public Content(Long cId, String cTitle, String cAuthor, String cDesc,Long cAdmin) {
+		super();
+		this.cId = cId;
+		this.cTitle = cTitle;
+		this.cAuthor = cAuthor;
+		this.cDesc = cDesc;
+		this.cAdmin = cAdmin;
+	}
+	
+	public Content( String cTitle, String cAuthor, String cDesc,Long cAdmin) {
+		super();
+		this.cTitle = cTitle;
+		this.cAuthor = cAuthor;
+		this.cDesc = cDesc;
+		this.cAdmin = cAdmin;
+	}
     
+	/***
+	 *是否需要下载观看
+	 */
+	@Column(name = "c_admin")
+	private Long cAdmin;
+
+	public Long getcAdmin() {
+		return cAdmin;
+	}
+
+	public void setcAdmin(Long cAdmin) {
+		this.cAdmin = cAdmin;
+	}
+	
     
 }

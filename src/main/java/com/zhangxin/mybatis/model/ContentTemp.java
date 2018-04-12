@@ -188,6 +188,25 @@ public class ContentTemp {
 		this.typeStr = typeStr;
 	}
 	
+	private Long cAdmin;
+
+	public Long getcAdmin() {
+		return cAdmin;
+	}
+
+	public void setcAdmin(Long cAdmin) {
+		this.cAdmin = cAdmin;
+	}
+	
+	private String adminStr;
+
+	public String getAdminStr() {
+		return adminStr;
+	}
+
+	public void setAdminStr(String adminStr) {
+		this.adminStr = adminStr;
+	}
 	
 	
 }

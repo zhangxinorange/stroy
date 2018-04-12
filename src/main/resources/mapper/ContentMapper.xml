@@ -12,13 +12,15 @@
     <result column="c_create_date" jdbcType="TIMESTAMP" property="cCreateDate" />
     <result column="c_content" jdbcType="LONGVARBINARY" property="cContent" />
     <result column="c_pic" jdbcType="LONGVARBINARY" property="cPic" />
+    <result column="c_Admin" jdbcType="BIGINT" property="cAdmin" />
+    <result column="c_PicStr" jdbcType="VARCHAR" property="cPicStr" />
   </resultMap>
   
   <select id="selectByContent" resultMap="BaseResultMap">
     select c.* from content c left join content_type s on s.c_id=c.c_id
     <where>
       <if test="cTitle != null and cTitle != ''">
-        c_title like concat('%',concat(#{cTitle}, '%'))
+       and  c_title like concat('%',concat(#{cTitle}, '%'))
       </if>
       <if test="cAuthor != null and cAuthor != ''">
         and c_Author like concat('%',concat(#{cAuthor}, '%'))
@@ -29,6 +31,44 @@
     </where>
 	order by c.c_title;
   </select>
+  <select id="getContentList"  resultMap="BaseResultMap">
+  	SELECT * FROM content c 
+  	<where>
+  		<if test="data.title != null and data.title != ''">
+       and c.c_title like concat('%',concat(#{data.title}, '%'))
+     	 </if>
+     	 <if test="data.author != null and data.author != ''">
+       and c.c_author like concat('%',concat(#{data.author}, '%'))
+     	 </if>
+     	 <if test="data.type != null and data.type != ''">
+      AND c.`c_Id` IN(SELECT ct.`c_id` FROM content_type ct WHERE ct.`t_id`=#{data.type})
+     	 </if>
+     	 <if test="data.admin != null and data.admin != ''">
+       and c.c_admin =${data.admin}
+     	 </if>
+  	</where>
+  	order by c.`c_create_date`  desc 
+  	 limit #{start},#{end} 
+  </select>
   
+  <select id="countContentList"   resultType="integer">
+  	SELECT count(*) FROM content c <!-- LEFT JOIN content_type ct ON ct.`c_id`=c.`c_Id`  -->
+  	<where>
+  		<if test="title != null and title != ''">
+       and c.c_title like concat('%',concat(#{title}, '%'))
+     	 </if>
+     	 <if test="author != null and author != ''">
+       and c.c_author like concat('%',concat(#{author}, '%'))
+     	 </if>
+     	 <if test="type != null and type != ''">
+      AND c.`c_Id` IN(SELECT ct.`c_id` FROM content_type ct WHERE ct.`t_id`=#{type})
+     	 </if>
+     	 <if test="admin != null and admin != ''">
+       and c.c_admin =${admin}
+     	 </if>
+  	</where>
+  	
+  	
+  </select>
   
 </mapper>

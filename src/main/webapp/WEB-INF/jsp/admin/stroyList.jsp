@@ -102,6 +102,7 @@
 											<th>小说名称</th>
 											<th>小说作者</th>
 											<th>类型</th>
+											<th>下载观看</th>
 											<th>简介</th>
 											<th>标题图</th>
 											<th>文章内容</th>
@@ -114,6 +115,7 @@
 												<td>${content.cTitle}</td>
 												<td>${content.cAuthor}</td>
 												<td>${content.typeStr}</td>
+												<td>${content.adminStr}</td>
 												<td>${content.cDesc}</td>
 												<td style="text-align: center;"><img alt=""
 													style="height: 50px;" src="${ctx }/${content.cPicStr}">
