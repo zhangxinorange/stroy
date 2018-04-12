@@ -15,16 +15,25 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.zhangxin.mybatis.model.Content;
+import com.zhangxin.mybatis.model.Member;
 import com.zhangxin.mybatis.model.Type;
 import com.zhangxin.mybatis.service.ContentService;
 import com.zhangxin.mybatis.service.ITypeService;
+import com.zhangxin.mybatis.service.MemberService;
 import com.zhangxin.mybatis.util.Result;
 import com.zhangxin.mybatis.util.ResultUtil;
+import com.zhangxin.mybatis.util.StroyContants;
 
 @Controller
+@RequestMapping(value="/user")
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class CustomerController {
 	@Autowired
 	private ContentService contentService;
+	
+	
+	@Autowired
+	private MemberService memberService;
 	
 	@Autowired
 	private ITypeService typeService;
@@ -33,9 +42,23 @@ public class CustomerController {
 	public ModelAndView index(HttpServletRequest request,HttpServletResponse response)
 	{
 		List<Content> cList=contentService.selectByContent(new Content(), 1, 3);
+		Map dList=contentService.selectContentByDownLoad(1, 3, true,null,null);
 		ModelAndView view=new ModelAndView("/user/index");
 		view.addObject("lunbo", cList);
+		view.addObject("cList", dList.get("data"));
 		return view;
+	}
+	
+	@RequestMapping(value= ("/searchOrder"),method=RequestMethod.POST)
+	public @ResponseBody Result order(HttpServletRequest request,HttpServletResponse response,String num)
+	{
+		Map dList=contentService.selectContentByDownLoad(1, 3, true,num,"desc");
+		return ResultUtil.success(dList);
+	}
+	@RequestMapping(value= {"/gotoDown"})
+	public String gotoDownLoad(HttpServletRequest request,HttpServletResponse response)
+	{
+		return "/user/downLondBook";
 	}
 	
 	@RequestMapping(value="/search",method=RequestMethod.GET)
@@ -47,7 +70,7 @@ public class CustomerController {
 		return view;
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+
 	@ResponseBody
 	@RequestMapping(value="/search",method=RequestMethod.POST)
 	public Result<List<Content>> searchBook(HttpServletRequest request,HttpServletResponse response,String title,String author,String type,String isAdmin,Integer pageIndex,Integer pageSize)
@@ -69,4 +92,50 @@ public class CustomerController {
 		Map maps=contentService.getContentList(map, pageIndex, pageSize);
 		return ResultUtil.success(maps);
 	}
+	
+	@RequestMapping(value="/login",method=RequestMethod.GET)
+	public ModelAndView gotoLogin(HttpServletRequest request,HttpServletResponse response)
+	{
+		
+		ModelAndView andView=new ModelAndView("/user/login");
+		return andView;
+	}
+	
+	
+	
+	@RequestMapping(value="/login",method=RequestMethod.POST)
+	public @ResponseBody Result login(HttpServletRequest request,HttpServletResponse response,String userName,String password)
+	{
+		Member membe=new Member();
+		membe.setmEmail(userName);
+		membe.setmPassword(password);
+		membe.setmType(1);
+		List<Member> mList=memberService.selectByT(membe);
+		if (mList==null||mList.size()==0) {
+			return ResultUtil.error(2, "用户名或密码错误");
+		}
+		else {
+			request.getSession().setAttribute(StroyContants.USER_SESSION_key, mList.get(0));
+			return ResultUtil.success();
+		}
+	}
+	@RequestMapping(value="/loginout",method=RequestMethod.POST)
+	public @ResponseBody Result loginOut(HttpServletRequest request,HttpServletResponse response)
+	{
+		request.getSession().removeAttribute(StroyContants.USER_SESSION_key);
+		return ResultUtil.success();
+	}
+	
+	@RequestMapping(value="/detail",method=RequestMethod.GET)
+	public ModelAndView gotoDetailBook(HttpServletRequest request,HttpServletResponse response,Long cId)
+	{
+		Content content=contentService.selectByKey(cId);
+		String type=contentService.getTypeStrByContentId(cId);
+		ModelAndView view=new ModelAndView("/user/book-detail");
+		view.addObject("content", content);
+		view.addObject("type", type);
+		return view;
+	}
+	
+	
 }

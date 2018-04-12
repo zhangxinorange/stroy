@@ -67,8 +67,20 @@
        and c.c_admin =${admin}
      	 </if>
   	</where>
-  	
-  	
   </select>
+  <select id="selectContentByDownLoad" resultMap="BaseResultMap">
+		  SELECT s.c_id,s.c_title,s.c_content,s.c_author,s.c_pic,s.c_create_date,s.c_picStr,s.c_admin,s.c_desc FROM (
+SELECT c.*,(SELECT COUNT(*) FROM download d WHERE d.`c_Id`=c.c_id) AS total,
+(SELECT COUNT(*) FROM readcontent r WHERE r.c_id=c.c_id) AS total2 FROM content c 
+) s ORDER BY ${order} ${desc} 
+			  limit #{0},#{1} 
+  </select>
+  
+   <select id="countContentByDownLoad" resultType="integer" >
+    SELECT count(*) FROM (
+			SELECT c.*,(SELECT COUNT(*) FROM download d WHERE d.`c_Id`=c.c_id) AS total FROM content c 
+			) s 
+   </select>
+  
   
 </mapper>

@@ -43,8 +43,10 @@ public class Member {
      */
     @Column(name = "m_type")
     private Integer mType;
+    
+  
 
-    /**
+	/**
      * @return m_Id
      */
     public Long getmId() {
@@ -147,4 +149,20 @@ public class Member {
     public void setmType(Integer mType) {
         this.mType = mType;
     }
+    
+    /***
+     * 用户名
+     */
+    @Column(name = "m_name")
+    private String mName;
+    
+    
+
+    public String getmName() {
+		return mName;
+	}
+
+	public void setmName(String mName) {
+		this.mName = mName;
+	}
 }

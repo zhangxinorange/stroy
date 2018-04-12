@@ -1,54 +1,57 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
+<html lang="en">
+<c:set var="ctx" value="${pageContext.request.contextPath}" />
+<c:set var="member" value="${sessionScope.member}" />
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="format-detection" content="telephone=no"/>
     <title>书库</title>
-    <link rel="stylesheet" href="fonts/iconfont.css"/>
-    <link rel="stylesheet" href="css/style.min.css">
-    <script src="js/loading.js"></script>
+    <link rel="stylesheet" href="${ctx }/static/fonts/iconfont.css"/>
+    <link rel="stylesheet" href="${ctx }/static/css/style.min.css">
+    <script src="${ctx }/static/js/loading.js"></script>
 </head>
 <body>
 <header class="header">
     <div class="flex flex-vc color-white book-detail-title">
         <div class="left" onclick="back()"><i class="icon-zuoleft157"></i></div>
-        <div class="box-flex-1 title"><h4 class="fz14rem">籍名字施法似的士大夫</h4></div>
+        <div class="box-flex-1 title"><h4 class="fz14rem">${content.cTitle }</h4></div>
         <div class="right"><a href="#"><i class="icon-yuedu"></i></a><span class="fg"></span><a href="../index.html"><i class="icon-zhuye1"></i></a></div>
     </div>
 </header>
 <!--书籍详情-->
 <div class="section recharge-col book-detail-box flex">
     <div class="book-detail-img">
-        <img src="images/132.jpg" alt="loading.." class="img-bespread">
+        <img src="${ctx }${content.cPicStr }" alt="loading.." class="img-bespread">
     </div>
     <div class="box-flex-1 book-detail-info">
-        <h4 class="none color-blue title">喜羊羊与灰太狼的故事</h4>
+        <h4 class="none color-blue title">${content.cTitle }</h4>
         <span class="state ing"><i class="icon-yuedu"></i>连载中</span>
         <!--<span class="state end">已完结</span>-->
         <div class="fz12rem mt1rem">
-            <p class="none ">作者：杨永信</p>
-            <p class="none ">分类：古典文学</p>
-            <p class="none ">字数：999999</p>
+            <p class="none ">作者：${content.cAuthor }</p>
+            <p class="none ">分类：${type }</p>
         </div>
     </div>
 </div>
-<div class="section flex recharge-col book-operation">
-    <a href="bookshelf.html" class="btn btn-primary box-flex-1"><i class="icon-kongxin"></i>加入书架</a>
+ <div class="section flex recharge-col book-operation">
+    <a href="bookshelf.html" class="btn btn-primary box-flex-1"><i class="icon-kongxin"></i>下载图书</a>
     <span class="fg"></span>
     <a href="book-read.html" class="btn btn-success box-flex-1"><i class="icon-chakan"></i>开始阅读</a>
-</div>
+</div> 
 <!--书籍简介-->
 <div class="section recharge-col book-intro">
     <h3 class="fz2rem book-detail-titles"><i class="icon-yuedu1"></i>书籍简介</h3>
     <article class="fz14rem book-intro-article">
-        <p>我要了！”惨遭男朋友卖掉的慕薇薇，摇身一变成为了叶少辰的妻子。休息室内，他的阴狠
-            “这个女人，我要了！”惨遭男朋友卖掉的慕薇薇，摇身一变成为了叶少辰的妻子。休息室内，他的阴狠，让她崩溃，“你娶我的目的</p>
+        <p>${content.cDesc }</p>
     </article>
-    <div class="text-center book-intro-unfold">展开更多介绍 <i class="icon-xia"></i></div>
+   <!--  <div class="text-center book-intro-unfold">展开更多介绍 <i class="icon-xia"></i></div> -->
 </div>
 <!--书籍目录-->
-<div class="section recharge-col mt1rem book-mulu">
+<!-- <div class="section recharge-col mt1rem book-mulu">
     <h3 class="fz2rem book-detail-titles"><i class="icon-mulu"></i>书籍目录</h3>
     <div class="book-all-mulu color-blue"><i class="icon-xia pull-right"></i>全部章节</div>
     <ul class="none book-mulu-items fz16rem">
@@ -59,7 +62,7 @@
         <li><a href="#"><i class="icon-vip"></i>第一章：喜洋洋与灰太狼的爱情故事</a></li>
         <li><a href="#"><i class="icon-vip"></i>第一章：喜洋洋与灰太狼的爱情故事</a></li>        
     </ul>
-</div>
+</div> -->
 <!--书籍评论-->
 <div class="section recharge-col mt1rem book-mulu">
     <h3 class="fz2rem book-detail-titles"><i class="icon-mulu"></i>评论</h3>
@@ -83,7 +86,7 @@
         <a href="javascript:;" class="btn btn-primary btn-block go-to-recharge">发布</a>
     </div>
 </div>
-<!--搜索框-->
+<!--搜索框
 <div class="search-box">
     <div class="search">
         <form action="#" method="get">
@@ -91,7 +94,7 @@
         <input type="submit" class="btn search-btn" value="搜索">
         </form>
     </div>
-</div>
+</div>-->
 <!--底部-->
 <footer class="footer">
     <ul class="none">
@@ -101,11 +104,10 @@
         <span class="fg">|</span>
         <li class=""><a href="#">充值</a></li>
     </ul>
-    <p class="none">客服QQ：123435666</p>
 </footer>
 </body>
-<script src="js/jquery.min.js"></script>
-<script src="js/script.js"></script>
+<script src="${ctx }/static/js/jquery.min.js"></script>
+<script src="${ctx }/static/js/script.js"></script>
 <script>
     $(function(){
         var article = $(".book-intro-article>p"),

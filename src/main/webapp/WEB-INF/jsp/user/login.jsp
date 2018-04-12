@@ -20,12 +20,12 @@
     <div class="r text-right"><a href="login.html"><i class="icon-zhuye"></i></a></div>
 </header>
 <!--登录-->
-<div class="login-box">
+<div class="login-box" style="text-align: center;">
     <h4 class="text-center">
-        <span>合作方一键登录</span>
+        <span>用户登录</span>
     </h4>
     <ul class="none flex text-center">
-        <li>
+        <!-- <li>
             <a href="#">
                 <div class="color-white"><i class="icon-weibo fz2rem"></i></div>
                 <p>微博登录</p>
@@ -42,12 +42,60 @@
                 <div class="color-white"><i class="icon-qq fz2rem"></i></div>
                 <p>QQ登录</p>
             </a>
+        </li> -->
+       <!--  <li>
+        	<input type="text" name="userName"/><br/>
         </li>
+        <li>
+        	<input type="text" name="password"/><br/>
+        </li>
+        <li>
+        	<input type="button" id="loginCoustmer"/>登录
+        </li> -->
     </ul>
+    <div>邮箱：<input type="text" name="userName" id="userName"/></div>
+         <div>密码：<input type="password" name="password" id="password"/></div>
+         <div style="margin-left: 50px;"><input type="button" id="loginCoustmer" title="登录" value="登录">&nbsp;<input type="button" id="regist" title="注册" value="注册"></div>
 </div>
 </body>
 <script src="${ctx }/static/js/jquery.min.js"></script>
 <script src="${ctx }/static/js/script.js"></script>
 <script>
+	$(function(){
+		$("#loginCoustmer").click(function(){
+			if($("#userName").val()=="")
+			{
+				alert("用户名不能为空");
+			}
+			if($("#password").val()=="")
+			{
+				alert("密码不能为空");
+			}
+			else
+			{
+				$.ajax({
+	                url: "${ctx}/user/login",
+	                data: { userName: $("#userName").val() ,password:$("#password").val()},
+	                type: "post",
+	                dataType:'json',
+	                success: function (data) {
+	               		if(data.code==0)
+	            		{
+	               			window.location.href="${ctx}/user/index";
+	            		}
+	               		else
+	              		{
+	              			alert(data.msg);
+	              			location.reload();
+	              		}
+	               		
+	                },
+	                error: function (jqXHR, textStatus, errorThrown) {
+	                    alert(jqXHR.responseText);
+	                }
+	            });
+			}
+		});
+	});
 </script>
 </html>

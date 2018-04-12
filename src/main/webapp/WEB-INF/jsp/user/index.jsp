@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
+<c:set var="member" value="${sessionScope.member}" />
 <head>
 <meta charset="UTF-8">
 <meta name="viewport"
@@ -23,7 +24,23 @@
 			<h1>悦享小说阅读网</h1>
 		</div>
 		<div class="r text-right">
-			<a href="${ctx}/static/login.html"><i class="icon-zhuye"></i></a>
+			<c:choose>
+				<c:when test="${empty member }">
+					<a href="${ctx}/user/login"><i class="icon-zhuye"></i></a>
+				</c:when>
+				<c:otherwise>
+					<table>
+						<tr>
+						<td>${member.mName }</td></tr>
+						
+						<tr>
+						<td><a style="font-size: 0.8rem;"  href="javascript:loginOut();" >退出登录</a></td></tr>
+					</table>
+				</c:otherwise>
+			</c:choose>
+		
+		
+			
 		</div>
 	</header>
 	<!--导航-->
@@ -32,9 +49,9 @@
 			<!--banner图懒加载 data.src-->
 			<div class="swiper-wrapper">
 				<c:forEach items="${lunbo }" var="content">
-					<div class="swiper-slide">
-					<img data-src="${ctx}/${content.cPicStr}" alt=""
-						class="img-bespread swiper-lazy" style="width: 100%;height: 100%;"/>
+					<div class="swiper-slide" style="text-align: center;">
+					<a href="javascript:window.location.href='${ctx }/user/detail?cId=${content.cId }'; "><img data-src="${ctx}/${content.cPicStr}" alt=""
+						class="img-bespread swiper-lazy" style="width: 100%;height: 30rem;"/></a>
 					<div class="swiper-lazy-preloader"></div>
 				</div>
 				
@@ -57,7 +74,7 @@
 	<div class="nav-box section">
 		<nav>
 			<ul class="flex flex-vc none text-center color-white fz16rem">
-				<li class="box-flex-1"><a href="${ctx}/index">
+				<li class="box-flex-1"><a href="${ctx}/user/index">
 						<div class="nav-div home">
 							<i class="icon icon-zhuye1"></i>
 						</div> <span>首页</span>
@@ -87,34 +104,26 @@
 	</div>
 	<!--限时免费-->
 	<div class="public-title section mt1rem">
-		<h2 class="none fz16rem">限时免费</h2>
+		<h2 class="none fz16rem"><b style="text-align: left;">下载排行</b><b style="text-align: right;float:right"><a style="font-size: 0.8rem;" href="javascript: window.location.href='${ctx }/user/gotoDown'">查看更多</a></b></h2>
 	</div>
 	<div class="section apps-free recharge-col">
 		<ul class="flex none text-center">
-			<li><a href="#">
-					<figure>
-						<img src="${ctx}/static/images/132.jpg" class="img-bespread"
-							alt="loading">
-						<p>限时免费</p>
-					</figure>
-					<h5 class="none">小说名字</h5>
-			</a></li>
-			<li><a href="#">
-					<figure>
-						<img src="${ctx}/static/images/132.jpg" class="img-bespread"
-							alt="loading">
-						<p>限时免费</p>
-					</figure>
-					<h5 class="none">小说名字</h5>
-			</a></li>
-			<li><a href="#">
-					<figure>
-						<img src="${ctx}/static/images/132.jpg" class="img-bespread"
-							alt="loading">
-						<p>限时免费</p>
-					</figure>
-					<h5 class="none">小说名字</h5>
-			</a></li>
+			<c:forEach items="${cList }" var="content">
+				<li><a href="#">
+						<figure>
+							<img src="${ctx}/${content.cPicStr}" class="img-bespread"
+								alt="loading">
+							<c:if test="${content.cAdmin eq 0 }">
+							<p>限时免费</p>
+							</c:if>
+							<c:if test="${content.cAdmin eq 1 }">
+							<p>会员专享</p>
+							</c:if>
+						</figure>
+						<h5 class="none">${content.cTitle}</h5>
+				</a></li>
+			
+			</c:forEach>
 		</ul>
 	</div>
 	
@@ -126,7 +135,6 @@
 			<span class="fg">|</span>
 			<li class=""><a href="#">充值</a></li>
 		</ul>
-		<p class="none">客服QQ：123435666</p>
 	</footer>
 </body>
 <script src="${ctx}/static/js/jquery.min.js"></script>
@@ -142,6 +150,35 @@
             lazyLoading : true,
         });
     })
+    
+    function loginOut()
+    {
+    	if(confirm("确认退出吗?"))
+    	{
+    		//window.location.href='${ctx}/user/loginout';
+    		
+    		$.ajax({
+                url: "${ctx}/user/loginout",
+                /* data: { userName: $("#userName").val() ,password:$("#password").val()}, */
+                type: "post",
+                dataType:'json',
+                success: function (data) {
+               		if(data.code==0)
+            		{
+               			window.location.href="${ctx}/user/index";
+            		}
+               		else
+              		{
+              			alert(data.msg);
+              			location.reload();
+              		}
+               		
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseText);
+                }
+            });
+    	}
+    }
 </script>
 </html>
->

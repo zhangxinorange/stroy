@@ -1,5 +1,7 @@
 package com.zhangxin.mybatis.service.impl;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +18,9 @@ import com.zhangxin.mybatis.model.Content;
 import com.zhangxin.mybatis.model.ContentType;
 import com.zhangxin.mybatis.model.Download;
 import com.zhangxin.mybatis.model.ReadContent;
+import com.zhangxin.mybatis.model.Type;
 import com.zhangxin.mybatis.service.ContentService;
+import com.zhangxin.mybatis.service.ITypeService;
 import com.zhangxin.mybatis.util.Result;
 import com.zhangxin.mybatis.util.ResultUtil;
 
@@ -25,6 +29,9 @@ import tk.mybatis.mapper.util.StringUtil;
 
 @Service
 public class ContentServiceImpl extends BaseService<Content> implements ContentService {
+	
+	@Autowired
+	private ITypeService typeService;
 
 	@Autowired
 	private ContentMapper contentMapper;
@@ -116,5 +123,77 @@ public class ContentServiceImpl extends BaseService<Content> implements ContentS
 		result.put("pageIndex", pageIndex);
 		result.put("pageCount", pageCount);
 		return result;
+	}
+
+
+	@Override
+	public Map selectContentByDownLoad(Integer pageIndex, Integer pageSize,boolean isIndex,String order,String desc) {
+		Integer total=contentMapper.countContentByDownLoad();
+		if (pageSize==null) {
+			pageSize=isIndex?3:5;
+		}
+		Integer pageCount=(int)Math.ceil(1.0*total/pageSize);
+		if (pageIndex==null) {
+			pageIndex=1;
+		}
+		if (pageIndex>pageCount&&pageCount!=0) {
+			pageIndex=pageCount;
+		}
+		Integer start=pageSize*(pageIndex-1);
+		Integer end=pageSize;
+		if (com.zhangxin.mybatis.util.StringUtil.isEmpty(order)) {
+			order="s.total";
+		}
+		else
+		{
+			switch (order) {
+			case "1":
+				order="s.c_create_date";
+				break;
+			case "2":
+				order="s.total";
+				break;
+			case "3":
+				order="s.total2";
+				break;
+			default:
+				break;
+			}
+		}
+		
+		if (com.zhangxin.mybatis.util.StringUtil.isEmpty(desc)) {
+			desc="desc ";
+		}
+		List<Content> cList=contentMapper.selectContentByDownLoad(start, end,order,desc);
+		
+		Map result=new HashMap<>();
+		result.put("data", cList);
+		result.put("total", total);
+		result.put("pageIndex", pageIndex);
+		result.put("pageCount", pageCount);
+		return result;
+	}
+
+
+	@Override
+	public String getTypeStrByContentId(Long cId) {
+		if (cId!=null) {
+			ContentType type=new ContentType(cId);
+			List<ContentType> ctList=contentTypeMapper.select(type);
+			if (ctList!=null&&ctList.size()>0) {
+				StringBuffer result=new StringBuffer();
+				for (ContentType contentType : ctList) {
+					Type t=typeService.selectByKey(contentType.gettId());
+					if (t!=null) {
+						result.append(t.gettName()).append(",");
+					}
+				}
+				if (result.length()>0) {
+					result=result.deleteCharAt(result.length()-1);
+					return result.toString();
+				}
+			}
+		}
+		return null;
 	}
 }
