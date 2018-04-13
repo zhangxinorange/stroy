@@ -7,30 +7,22 @@ import javax.persistence.*;
  * @author pc
  *
  */
-@Table(name = "download")
-public class Download {
-    @Id
-    @Column(name = "d_id")
-    @GeneratedValue(generator = "JDBC")
+public class DownloadTemp {
     private Long dId;
 
     /**
      * 下载人
      */
-    @Column(name = "s_Id")
     private Long sId;
 
     /**
      * 下载人
      */
-    @Column(name = "c_Id")
     private Long cId;
 
     /**
      * 下载时间
      */
-    @OrderBy("desc")
-    @Column(name = "d_create_date")
     private Date dCreateDate;
 
     /**
@@ -100,4 +92,27 @@ public class Download {
     public void setdCreateDate(Date dCreateDate) {
         this.dCreateDate = dCreateDate;
     }
+    
+    private String mName;
+    
+    private String cTitle;
+
+	public String getmName() {
+		return mName;
+	}
+
+	public void setmName(String mName) {
+		this.mName = mName;
+	}
+
+	public String getcTitle() {
+		return cTitle;
+	}
+
+	public void setcTitle(String cTitle) {
+		this.cTitle = cTitle;
+	}
+    
+    
+    
 }

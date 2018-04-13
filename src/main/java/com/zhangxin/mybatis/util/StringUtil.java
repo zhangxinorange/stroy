@@ -4912,8 +4912,11 @@ public class StringUtil {
 	
 	public static String delHtmlTag(String str){ 
 	    String newstr = ""; 
-	    newstr = str.replaceAll("<[.[^>]]*>","");
-	    newstr = newstr.replaceAll(" ", ""); 
+	    if (!StringUtil.isEmpty(str)) {
+	    	newstr = str.replaceAll("<[.[^>]]*>","");
+		    newstr = newstr.replaceAll(" ", ""); 
+		}
+	    
 	    return newstr;
 	}
 }

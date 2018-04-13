@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
+<c:set var="member" value="${sessionScope.member}" />
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -17,11 +18,25 @@
 </head>
 <body>
 <header class="header flex flex-vc">
-    <div class="l"><a href="${ctx }/index"><i class="icon-zhuye1"></i></a></div>
-    <div class="c box-flex-1 text-center"><h1>哈哈哈中午网</h1></div>
-    <div class="r text-right"><a href="login.html"><i class="icon-zhuye"></i></a></div>
+    <div class="l"><a href="${ctx }/user/index"><i class="icon-zhuye1"></i></a></div>
+    <div class="c box-flex-1 text-center"><h1>小说在线</h1></div>
+    <div class="r text-right"><c:choose>
+				<c:when test="${empty member }">
+					<a href="${ctx}/user/login"><i class="icon-zhuye"></i></a>
+				</c:when>
+				<c:otherwise>
+					<table>
+						<tr>
+						<td>${member.mName }</td></tr>
+						
+						<tr>
+						<td><a style="font-size: 0.8rem;"  href="javascript:loginOut();" >退出登录</a></td></tr>
+					</table>
+				</c:otherwise>
+			</c:choose></div>
 </header>
-
+<input type="hidden" id="pageS" />
+<input type="hidden" id="typeS" />
 <!--我的书架-->
 <div class="section bookzoom-box">
     <h3 class="fz2rem"><i class="icon-yuedu"></i></h3>
@@ -29,9 +44,9 @@
     <div class="bookzoom-classify flex">
         <span style="width: 9.3rem;">查看方式:</span>
         <div class="box-flex-1">
-         	<a href="javascript:search(1);" class="active">最新上架</a>
-            <a href="javascript:search(2);" >下载量</a>
-             <a href="javascript:search(3);" >阅读量</a>
+         	<a href="javascript:search(1);" class="active" title="1">最新上架</a>
+            <a href="javascript:search(2);" title="2">下载量</a>
+             <a href="javascript:search(3);" title="3">阅读量</a>
         </div>
     </div>
 </div>
@@ -52,22 +67,33 @@
 <!--底部-->
 <footer class="footer">
     <ul class="none">
-        <li class=""><a href="#">登录</a></li>
+        <li class=""><a href="${ctx }/user/userCenter">登录</a></li>
         <span class="fg">|</span>
-        <li class=""><a href="#">首页</a></li>
+        <li class=""><a href="${ctx }/user/index">首页</a></li>
         <span class="fg">|</span>
-        <li class=""><a href="#">充值</a></li>
+        <li class=""><a href="${ctx }/user/search">搜索</a></li>
     </ul>
 </footer>
 </body>
 <script src="${ctx }/static/js/jquery.min.js"></script>
 <script src="${ctx }/static/js/script.js"></script>
 <script>
+	function changePage(num)
+	{
+		$("#pageS").val(num);
+		search('');
+	}
 	function search(num)
 	{
+		var page=$("#pageS").val();
+		var type=$("#typeS").val();
+		if(num=='')
+		{
+			num=type;
+		}
 		 $.ajax({
              url: "${ctx}/user/searchOrder",
-             data: { num:num},
+             data: { num:num,page:page},
              type: "post",
              dataType:'json',
              success: function (data) {
@@ -81,7 +107,7 @@
            				 {	
             				 html+='<i class="icon-vip"></i>';
            				 }
-            			 html+='<a href="book-detail.html">'+obj.cTitle+'</a></h4><p class="none fz14rem">简介 ：'+obj.cDesc+'</p>';
+            			 html+='<a href="javascript:window.location.href=\'${ctx }/user/detail?cId='+obj.cId+'\';" >'+obj.cTitle+'</a></h4><p class="none fz14rem">简介 ：'+obj.cDesc+'</p>';
             			 html+='<p class="none fz12rem color-grey">作者：'+obj.cAuthor+'<span class="fg"></span></p></div>';
             			 html+='<div class="text-right color-grey fz12rem">'+obj.cCreateDate+'</div>'
             			});
@@ -133,14 +159,73 @@
         //选项卡切换
         var $bookshelf_title = $(".box-flex-1>a");
         $bookshelf_title.on('click',function(){
+        	 $("#typeS").val();
             var $this = $(this),
                 $content = $(".bookshelf-content").find(".bookshelf-read"),
                 $index= $bookshelf_title.index(this);
             $this.addClass('active').siblings().removeClass('active');
             $content.eq($index).show().siblings().hide();
+            $("#typeS").val($this.attr("title"));
         })
         search("1");
     })
-    
+    function loginOut()
+    {
+    	if(confirm("确认退出吗?"))
+    	{
+    		//window.location.href='${ctx}/user/loginout';
+    		
+    		$.ajax({
+                url: "${ctx}/user/loginout",
+                /* data: { userName: $("#userName").val() ,password:$("#password").val()}, */
+                type: "post",
+                dataType:'json',
+                success: function (data) {
+               		if(data.code==0)
+            		{
+               			window.location.href="${ctx}/user/index";
+            		}
+               		else
+              		{
+              			alert(data.msg);
+              			location.reload();
+              		}
+               		
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseText);
+                }
+            });
+    	}
+    }
+    function loginOut()
+    {
+    	if(confirm("确认退出吗?"))
+    	{
+    		//window.location.href='${ctx}/user/loginout';
+    		
+    		$.ajax({
+                url: "${ctx}/user/loginout",
+                /* data: { userName: $("#userName").val() ,password:$("#password").val()}, */
+                type: "post",
+                dataType:'json',
+                success: function (data) {
+               		if(data.code==0)
+            		{
+               			window.location.href="${ctx}/user/index";
+            		}
+               		else
+              		{
+              			alert(data.msg);
+              			location.reload();
+              		}
+               		
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseText);
+                }
+            });
+    	}
+    }
 </script>
 </html>

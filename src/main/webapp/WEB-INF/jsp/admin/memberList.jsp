@@ -2,6 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+　<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
@@ -46,7 +47,7 @@
 							</ul></li>
 					</ul>
 					<ul class="nav">
-						<li class="active"><a href="#">文章内容管理</a></li>
+						<li class="active"><a href="#">注册用户管理</a></li>
 					</ul>
 				</div>
 				<!--/.nav-collapse -->
@@ -57,13 +58,13 @@
 		<div class="row-fluid">
 			<div class="span3" id="sidebar">
 				<ul class="nav nav-list bs-docs-sidenav nav-collapse collapse">
-					<li class="active"><a href="${ctx }/stroy/list"><i
+					<li ><a href="${ctx }/stroy/list"><i
 							class="icon-chevron-right"></i> 小说文章管理</a></li>
 					<li><a href="${ctx }/type/list"><i class="icon-chevron-right"></i>
 							文章类别</a></li>
-					<li><a href="${ctx }/admin/memberList"><i class="icon-chevron-right"></i>
+					<li class="active"><a href="${ctx }/admin/memberList"><i class="icon-chevron-right"></i>
 							注册用户管理</a></li>
-					<li><a href="${ctx }/stroy/downList"><i class="icon-chevron-right"></i>
+					<li ><a href="${ctx }/stroy/downList" ><i class="icon-chevron-right"></i>
 							下载量查询</a></li>
 					<li><a href="${ctx }/stroy/readList"><i class="icon-chevron-right"></i>
 							阅读量查询</a></li>
@@ -80,64 +81,47 @@
 					<!-- block -->
 					<div class="block">
 						<div class="navbar navbar-inner block-header">
-							<div class="muted pull-left">小说列表</div>
+							<div class="muted pull-left">注册用户列表</div>
 						</div>
 						<div class="block-content collapse in">
 							<div class="span12">
 								<div class="table-toolbar">
 									<div class="btn-group">
-										<a
-											href="javascript:window.location.href='${ctx }/stroy/viewStroy'"><button
-												class="btn btn-success">
-												新增小说 <i class="icon-plus icon-white"></i>
-											</button></a>
 									</div>
 								</div>
 								<table cellpadding="0" cellspacing="0" border="0"
 									class="table table-striped table-bordered" id="example">
 									<thead>
 										<tr>
-											<th>小说名称</th>
-											<th>小说作者</th>
-											<th>类型</th>
-											<th>下载观看</th>
-											<th>简介</th>
-											<th>标题图</th>
-											<th>文章内容</th>
+											<th>用户名</th>
+											<th>用户邮箱</th>
+											<th>用户电话</th>
+											<th>是否管理员</th>
 											<th>操作</th>
 										</tr>
 									</thead>
 									<tbody>
-										<c:forEach items="${tempList}" var="content">
+										<c:forEach items="${data.data}" var="down">
 											<tr class="gradeA">
-												<td>${content.cTitle}</td>
-												<td>${content.cAuthor}</td>
-												<td>${content.typeStr}</td>
-												<td>${content.adminStr}</td>
-												<td><%-- ${content.cDesc} --%>
-													<c:if test="${fn:length(content.cDesc)>12 }">  
-								                         ${fn:substring(content.cDesc, 0, 12)}...  
-								                   </c:if> <c:if test="${fn:length(content.cDesc)<=12 }">  
-								                         ${content.cDesc }  
-                  									 </c:if>
-												
-												
-												</td>
-												<td style="text-align: center;"><img alt=""
-													style="height: 50px;" src="${ctx }/${content.cPicStr}">
-												</td>
-												<td style="width: 20%"><c:if test="${fn:length(content.detail)>12 }">  
-								                         ${fn:substring(content.detail, 0, 12)}...  
-								                   </c:if> <c:if test="${fn:length(content.detail)<=12 }">  
-								                         ${content.detail }  
-                  									 </c:if>
-                  								</td>
-												<td style="text-align: center;">[<a
-													href="${ctx}/stroy/edit?cId=${content.cId}">修改</a>] - [<a
-													href="javascript:deleteContent('${content.cId}');">删除</a>]
-												</td>
+												<td>${down.cTitle }</td>
+												<td>${down.mName}</td>
+												<td><fmt:formatDate value="${down.dCreateDate}" pattern="yyyy-MM-dd" /></td>
 											</tr>
 										</c:forEach>
+										 <c:forEach items="${pageInfo.list}" var="member">
+                    <tr class="gradeA">
+                   		<td>${member.mName}</td>
+                        <td>${member.mEmail}</td>
+                        <td>${member.mPhone}</td>
+                        <td>
+                        	<c:if test="${member.mType eq 0 }">是</c:if>
+                        	<c:if test="${member.mType eq 1 }">否</c:if>
+                        </td>
+                        <td style="text-align:center;">
+                            [<a href="javascript: deleteMember('${ member.mId}');">删除</a>]
+                        </td>
+                    </tr>
+                </c:forEach>
 
 									</tbody>
 								</table>
@@ -151,18 +135,18 @@
 											<ul>
 											<c:if test="${pageInfo.hasPreviousPage }">
 												<li class="prev 
-												"><a href="${ctx }/stroy/list?page=${pageInfo.prePage}">← 上一页</a></li></c:if>
+												"><a href="${ctx }/admin/memberList?page=${pageInfo.prePage}">← 上一页</a></li></c:if>
 												<c:forEach items="${pageInfo.navigatepageNums}" var="nav">
 													<c:if test="${nav == pageInfo.pageNum}">
 							                           <%--  <td style="font-weight: bold;">${nav}</td> --%>
 							                            <li class="active"><a href="#">${nav}</a></li>
 							                        </c:if>
 							                        <c:if test="${nav != pageInfo.pageNum}">
-							                        	<li ><a href="${ctx }/stroy/list?page=${nav}">${nav}</a></li>
+							                        	<li ><a href="${ctx }/admin/memberList?page=${nav}">${nav}</a></li>
 							                        </c:if>
 												</c:forEach>
 												<c:if test="${pageInfo.hasNextPage }">
-												<li class="next"><a href="${ctx }/stroy/list?page=${pageInfo.nextPage}">下一页 → </a></li></c:if>
+												<li class="next"><a href="${ctx }/admin/memberList?page=${pageInfo.nextPage}">下一页 → </a></li></c:if>
 											</ul>
 										</div>
 									</div>
@@ -199,6 +183,14 @@
 			confirm("删除会导致文章评论、阅读量、下载量清空，确认删除吗？")
 			{
 				window.location.href="${ctx}/stroy/delete?cId="+id;
+			}
+		}
+		
+		function deleteMember(id)
+		{
+			if(confirm("确定删除吗?"))
+			{
+				window.location.href="${pageContext.request.contextPath}/admin/delete?mId="+id;
 			}
 		}
 	</script>

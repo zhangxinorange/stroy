@@ -7,35 +7,17 @@ import javax.persistence.*;
  * @author pc
  *
  */
-@Table(name = "readContent")
-public class ReadContent {
-    @Id
-    @Column(name = "r_iD")
-    @GeneratedValue(generator = "JDBC")
+public class ReadContentTemp {
     private Long rId;
-
-    /**
-     * 小说Id
-     */
-    @Column(name = "c_id")
     private Long cId;
-
-    /**
-     * 阅读人
-     */
-    @Column(name = "m_id")
     private Long mId;
+    
+    private String cTitle;
+    
+    private String mName;
 
-    /**
-     * 阅读时间
-     */
-    @OrderBy("desc")
-    @Column(name = "r_create_Date")
     private Date rCreateDate;
 
-    /**
-     * @return r_iD
-     */
     public Long getrId() {
         return rId;
     }
@@ -100,4 +82,23 @@ public class ReadContent {
     public void setrCreateDate(Date rCreateDate) {
         this.rCreateDate = rCreateDate;
     }
+
+
+	public String getcTitle() {
+		return cTitle;
+	}
+
+	public void setcTitle(String cTitle) {
+		this.cTitle = cTitle;
+	}
+
+	public String getmName() {
+		return mName;
+	}
+
+	public void setmName(String mName) {
+		this.mName = mName;
+	}
+    
+    
 }

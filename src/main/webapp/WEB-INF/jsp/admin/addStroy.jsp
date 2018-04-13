@@ -61,13 +61,13 @@
 				<ul class="nav nav-list bs-docs-sidenav nav-collapse collapse">
 					<li class="active"><a href="${ctx }/stroy/list"><i
 							class="icon-chevron-right"></i> 小说文章管理</a></li>
-					<li><a href="${ctx }/type/list"><i
-							class="icon-chevron-right"></i> 文章类别</a></li>
+					<li><a href="${ctx }/type/list"><i class="icon-chevron-right"></i>
+							文章类别</a></li>
 					<li><a href="stats.html"><i class="icon-chevron-right"></i>
 							注册用户管理</a></li>
-					<li><a href="form.html"><i class="icon-chevron-right"></i>
+					<li><a href="${ctx }/stroy/downList"><i class="icon-chevron-right"></i>
 							下载量查询</a></li>
-					<li><a href="tables.html"><i class="icon-chevron-right"></i>
+					<li><a href="${ctx }/stroy/readList"><i class="icon-chevron-right"></i>
 							阅读量查询</a></li>
 					<li><a href="buttons.html"><i class="icon-chevron-right"></i>
 							新闻通知管理</a></li>

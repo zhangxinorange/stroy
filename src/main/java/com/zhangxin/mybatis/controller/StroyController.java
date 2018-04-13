@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +30,8 @@ import com.zhangxin.mybatis.model.ContentType;
 import com.zhangxin.mybatis.model.Type;
 import com.zhangxin.mybatis.service.ContentService;
 import com.zhangxin.mybatis.service.ContentTypeService;
+import com.zhangxin.mybatis.service.DownLoadService;
+import com.zhangxin.mybatis.service.IReadService;
 import com.zhangxin.mybatis.service.ITypeService;
 import com.zhangxin.mybatis.util.JsonLibUtils;
 import com.zhangxin.mybatis.util.StroyContants;
@@ -45,6 +48,14 @@ public class StroyController {
 	
 	@Autowired
 	private ContentTypeService contentTypeService;
+	
+	
+	@Autowired
+	private IReadService readService;
+	
+	
+	@Autowired
+	private DownLoadService downLoadService;
 
 	@RequestMapping(value = "/list")
 	public ModelAndView getStroyList(HttpServletRequest request, HttpServletResponse response,
@@ -62,6 +73,27 @@ public class StroyController {
 		result.addObject("page", page);
 		result.addObject("rows", rows);
 		result.addObject("user", request.getSession().getAttribute(StroyContants.ADMIN_SESSION_KEY));
+		return result;
+	}
+	
+	
+	@RequestMapping(value = "/readList")
+	public ModelAndView readList(HttpServletRequest request, HttpServletResponse response,
+			@RequestParam(required = false, defaultValue = "1") int page,
+			@RequestParam(required = false, defaultValue = StroyContants.DEFAULT_ROW) int rows) {
+		Map map=readService.getReadMap(page, rows);
+		ModelAndView result = new ModelAndView("/admin/readList");
+		result.addObject("data", map);
+		return result;
+	}
+	
+	@RequestMapping(value = "/downList")
+	public ModelAndView downList(HttpServletRequest request, HttpServletResponse response,
+			@RequestParam(required = false, defaultValue = "1") int page,
+			@RequestParam(required = false, defaultValue = StroyContants.DEFAULT_ROW) int rows) {
+		Map map=downLoadService.getDownLoadMap(page, rows);
+		ModelAndView result = new ModelAndView("/admin/downList");
+		result.addObject("data", map);
 		return result;
 	}
 

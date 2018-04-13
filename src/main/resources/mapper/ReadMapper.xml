@@ -1,13 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhangxin.mybatis.mapper.ReadMapper">
-  <resultMap id="BaseResultMap" type="com.zhangxin.mybatis.model.ReadContent">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="r_iD" jdbcType="BIGINT" property="rId" />
-    <result column="c_id" jdbcType="BIGINT" property="cId" />
-    <result column="m_id" jdbcType="BIGINT" property="mId" />
-    <result column="r_create_Date" jdbcType="TIMESTAMP" property="rCreateDate" />
-  </resultMap>
+	<resultMap id="BaseResultMap" type="com.zhangxin.mybatis.model.ReadContent">
+		<!-- WARNING - @mbg.generated -->
+		<id column="r_iD" jdbcType="BIGINT" property="rId" />
+		<result column="c_id" jdbcType="BIGINT" property="cId" />
+		<result column="m_id" jdbcType="BIGINT" property="mId" />
+		<result column="r_create_Date" jdbcType="TIMESTAMP" property="rCreateDate" />
+	</resultMap>
+	
+	<resultMap id="BaseResultMap_1" type="com.zhangxin.mybatis.model.ReadContentTemp">
+		<!-- WARNING - @mbg.generated -->
+		<id column="r_iD" jdbcType="BIGINT" property="rId" />
+		<result column="c_id" jdbcType="BIGINT" property="cId" />
+		<result column="m_id" jdbcType="BIGINT" property="mId" />
+		<result column="r_create_Date" jdbcType="TIMESTAMP" property="rCreateDate" />
+		<result column="c_title" jdbcType="VARCHAR" property="cTitle" />
+		<result column="m_Name" jdbcType="VARCHAR" property="mName" />
+	</resultMap>
+
+	<select id="getReadMap" resultMap="BaseResultMap_1">
+		SELECT s.*,c.`c_title`,m.`m_Name` FROM readcontent s LEFT JOIN content c ON
+		c.`c_Id`=s.`c_id` LEFT JOIN member m ON m.`m_Id`=s.`m_id` ORDER BY
+		s.`r_create_Date` DESC limit #{start} , #{end}
+	</select>
+	
+	<select id="getCountReadMap" resultType="integer">
+		select count(*) from readcontent
+	</select>
 </mapper>

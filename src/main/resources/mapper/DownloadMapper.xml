@@ -10,4 +10,39 @@
     <result column="c_Id" jdbcType="BIGINT" property="cId" />
     <result column="d_create_date" jdbcType="TIMESTAMP" property="dCreateDate" />
   </resultMap>
+  
+  
+  <resultMap id="BaseResultMap_1" type="com.zhangxin.mybatis.model.DownloadTemp">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="d_id" jdbcType="BIGINT" property="dId" />
+    <result column="s_Id" jdbcType="BIGINT" property="sId" />
+    <result column="c_Id" jdbcType="BIGINT" property="cId" />
+    <result column="d_create_date" jdbcType="TIMESTAMP" property="dCreateDate" />
+    <result column="c_title" jdbcType="VARCHAR" property="cTitle" />
+	<result column="m_Name" jdbcType="VARCHAR" property="mName" />
+  </resultMap>
+  
+  
+  <select id="getDownLoadMap" resultMap="BaseResultMap_1">
+  SELECT 
+  s.*,
+  c.`c_title`,
+  m.`m_Name` 
+FROM
+  download s 
+  LEFT JOIN content c 
+    ON c.`c_Id` = s.`c_Id`
+  LEFT JOIN member m 
+    ON m.`m_Id` = s.`s_Id`
+ORDER BY s.`d_create_date` DESC 
+limit #{start},#{end}
+  
+  </select>
+  
+  <select id="getCount" resultType="integer">
+  
+  	select count(*) from download
+  </select>
 </mapper>

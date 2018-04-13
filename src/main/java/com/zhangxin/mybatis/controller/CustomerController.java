@@ -2,6 +2,7 @@ package com.zhangxin.mybatis.controller;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.Validate;
+import org.omg.CORBA.TCKind;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -52,6 +55,7 @@ public class CustomerController {
 	
 	@Autowired
 	private DownLoadService downLoadService;
+	
 
 	@RequestMapping(value = { "", "/index" })
 	public ModelAndView index(HttpServletRequest request, HttpServletResponse response) {
@@ -64,8 +68,8 @@ public class CustomerController {
 	}
 
 	@RequestMapping(value = ("/searchOrder"), method = RequestMethod.POST)
-	public @ResponseBody Result order(HttpServletRequest request, HttpServletResponse response, String num) {
-		Map dList = contentService.selectContentByDownLoad(1, 3, true, num, "desc");
+	public @ResponseBody Result order(HttpServletRequest request, HttpServletResponse response, String num,Integer page) {
+		Map dList = contentService.selectContentByDownLoad(page, 3, true, num, "desc");
 		return ResultUtil.success(dList);
 	}
 
@@ -82,9 +86,9 @@ public class CustomerController {
 		return view;
 	}
 
-	@ResponseBody
+	
 	@RequestMapping(value = "/search", method = RequestMethod.POST)
-	public Result<List<Content>> searchBook(HttpServletRequest request, HttpServletResponse response, String title,
+	public @ResponseBody Result<List<Content>> searchBook(HttpServletRequest request, HttpServletResponse response, String title,
 			String author, String type, String isAdmin, Integer pageIndex, Integer pageSize) {
 		if (pageSize == null) {
 			pageSize = 3;
@@ -105,9 +109,44 @@ public class CustomerController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ModelAndView gotoLogin(HttpServletRequest request, HttpServletResponse response, String url) {
-		ModelAndView andView = new ModelAndView("/user/login");
-		andView.addObject("returnUrl", url);
-		return andView;
+		Member member=(Member)request.getSession().getAttribute(StroyContants.USER_SESSION_key);
+		if (member!=null) {
+			ModelAndView andView = new ModelAndView("/user/userCenter");
+			
+			List<Content> readList=new ArrayList<>();
+			
+			List<Content> downList=new ArrayList<>();
+			if (member!=null) {
+				ReadContent readContent=new ReadContent();
+				readContent.setmId(member.getmId());
+				List<ReadContent> rList=readService.selectByT(readContent);
+				if (rList!=null&&rList.size()>0) {
+					for (ReadContent rc : rList) {
+						Content content=contentService.selectByKey(rc.getcId());
+						readList.add(content);
+					}
+				}
+				andView.addObject("rList", readList);
+				
+				Download download=new Download();
+				download.setsId(member.getmId());
+				List<Download> dList=downLoadService.selectByT(download);
+				if (dList!=null&&dList.size()>0) {
+					for (Download dc : dList) {
+						Content content=contentService.selectByKey(dc.getcId());
+						downList.add(content);
+					}
+				}
+				andView.addObject("dList", downList);
+			}
+			
+			return andView;
+		}
+		else {
+			ModelAndView andView = new ModelAndView("/user/login");
+			andView.addObject("returnUrl", url);
+			return andView;
+		}
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -217,4 +256,63 @@ public class CustomerController {
 		return "/user/readBook";
 	}
 
+	@RequestMapping(value="/userCenter",method=RequestMethod.POST)
+	public String userCenter(HttpServletResponse response,HttpServletRequest request,ModelMap map)
+	{
+		Member member=(Member)request.getSession().getAttribute(StroyContants.USER_SESSION_key);
+		List<Content> readList=new ArrayList<>();
+		
+		List<Content> downList=new ArrayList<>();
+		if (member!=null) {
+			ReadContent readContent=new ReadContent();
+			readContent.setmId(member.getmId());
+			List<ReadContent> rList=readService.selectByT(readContent);
+			if (rList!=null&&rList.size()>0) {
+				for (ReadContent rc : rList) {
+					Content content=contentService.selectByKey(rc.getcId());
+					readList.add(content);
+				}
+			}
+			map.put("rList", readList);
+			
+			Download download=new Download();
+			download.setsId(member.getmId());
+			List<Download> dList=downLoadService.selectByT(download);
+			if (dList!=null&&dList.size()>0) {
+				for (Download dc : dList) {
+					Content content=contentService.selectByKey(dc.getcId());
+					downList.add(content);
+				}
+			}
+			map.put("dList", downList);
+		}
+		return "/user/userCenter";
+	}
+	
+	@RequestMapping(value="/regist",method=RequestMethod.GET)
+	public String gotoregist(HttpServletRequest request,HttpServletResponse response)
+	{
+		
+		return "/user/regist";
+	}
+	
+	@RequestMapping(value="/regist",method=RequestMethod.POST)
+	public String regist(HttpServletRequest request,HttpServletResponse response,Member member)
+	{
+		memberService.save(member);
+		request.getSession().removeAttribute(StroyContants.USER_SESSION_key);
+		return "redirect:/user/login";
+	}
+	
+	@RequestMapping(value="/validate",method=RequestMethod.POST)
+	public @ResponseBody Result<String> validate(HttpServletRequest request,HttpServletResponse response,String eMail)
+	{
+		Member member=new Member();
+		member.setmEmail(eMail);
+		List<Member> mList=memberService.selectByT(member);
+		if (mList!=null&&mList.size()>0) {
+			return ResultUtil.error(2, "注册用邮箱已经存在，请重新输入");
+		}
+		return ResultUtil.success();
+	}
 }

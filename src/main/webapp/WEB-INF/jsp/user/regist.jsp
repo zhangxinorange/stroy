@@ -36,7 +36,7 @@
 <!--登录-->
 <div class="login-box" style="text-align: center;">
     <h4 class="text-center">
-        <span>用户登录</span>
+        <span>用户注册</span>
     </h4>
     <ul class="none flex text-center">
         <!-- <li>
@@ -67,58 +67,61 @@
         	<input type="button" id="loginCoustmer"/>登录
         </li> -->
     </ul>
-    <div>邮箱：<input type="text" name="userName" id="userName"/></div>
-         <div>密码：<input type="password" name="password" id="password"/></div>
-         <div style="margin-left: 50px;"><input type="button" id="loginCoustmer" title="登录" value="登录">&nbsp;<input type="button" id="regist" title="注册" value="注册"></div>
+    <form id="from1" action="${ctx }/user/regist" method="post">
+    	<div>用户名：<input type="text" name="mName" id="mName"/></div>
+    	<div>登录邮箱：<input type="text" name="mEmail" id="mEmail"/></div>
+    	<div>手机号：<input type="text" name="mPhone" id="mPhone"/></div>
+         <div>密码：<input type="password" name="mPassword" id="mPassword"/><input type="hidden" name="mType" id="mType" value="1"/></div>
+         <input type="button" id="regist" title="注册" value="注册"></div>
+	</form>
 </div>
 </body>
 <script src="${ctx }/static/js/jquery.min.js"></script>
 <script src="${ctx }/static/js/script.js"></script>
 <script>
 	$(function(){
-		$("#loginCoustmer").click(function(){
-			if($("#userName").val()=="")
+		$("#regist").click(function(){
+			//window.location.href="${ctx}/user/regist";
+			if($("#mName").val()=="")
 			{
 				alert("用户名不能为空");
+				return;
 			}
-			if($("#password").val()=="")
+			
+			if($("#mEmail").val()=="")
 			{
-				alert("密码不能为空");
+				alert("登录用邮箱不能为空");
+				return;
 			}
-			else
+			if($("#mPassword").val()=="")
 			{
-				$.ajax({
-	                url: "${ctx}/user/login",
-	                data: { userName: $("#userName").val() ,password:$("#password").val()},
-	                type: "post",
-	                dataType:'json',
-	                success: function (data) {
-	               		if(data.code==0)
-	            		{
-	               			if('${returnUrl}'!='')
-               				{
-	               				window.location.href='${ctx}/user/detail?cId=${returnUrl}';
-               				}
-	               			else
-	               			{
-	               				window.location.href="${ctx}/user/index";
-	               			}
-	            		}
-	               		else
-	              		{
-	              			alert(data.msg);
-	              			location.reload();
-	              		}
-	               		
-	                },
-	                error: function (jqXHR, textStatus, errorThrown) {
-	                    alert(jqXHR.responseText);
-	                }
-	            });
+				alert("登录密码不能为空");
+				return;
 			}
-		});
-		$("#regist").click(function(){
-			window.location.href="${ctx}/user/regist";
+			
+			$.ajax({
+                url: "${ctx}/user/validate",
+                 data: { eMail: $("#mEmail").val()},
+                type: "post",
+                dataType:'json',
+                success: function (data) {
+               		if(data.code==0)
+            		{
+               			//window.location.href="${ctx}/user/index";
+               			confirm("注册成功");
+               			$("#from1").submit();
+            		}
+               		else
+              		{
+              			alert(data.msg);
+              			location.reload();
+              		}
+               		
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseText);
+                }
+            });
 		})
 	});
 	function loginOut()

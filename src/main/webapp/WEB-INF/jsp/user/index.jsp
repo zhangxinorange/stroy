@@ -18,7 +18,7 @@
 <body>
 	<header class="header flex flex-vc">
 		<div class="l">
-			<a href="#"><i class="icon-zhuye1"></i></a>
+			<a href="${ctx }/user/index"><i class="icon-zhuye1"></i></a>
 		</div>
 		<div class="c box-flex-1 text-center">
 			<h1>悦享小说阅读网</h1>
@@ -29,13 +29,15 @@
 					<a href="${ctx}/user/login"><i class="icon-zhuye"></i></a>
 				</c:when>
 				<c:otherwise>
+				<form id="forq" action="${ctx }/user/userCenter" method="post">
 					<table>
 						<tr>
-						<td>${member.mName }</td></tr>
+						<td><a style="font-size: 1.3rem;" href="javascript:$('#forq').submit();">${member.mName }</a></td></tr>
 						
 						<tr>
 						<td><a style="font-size: 0.8rem;"  href="javascript:loginOut();" >退出登录</a></td></tr>
 					</table>
+					</form>
 				</c:otherwise>
 			</c:choose>
 		
@@ -81,7 +83,7 @@
 				</a></li>
 				<%-- <li class="box-flex-1"><a href="${ctx}/static/recharge.html">
 						<div class="nav-div cz fz22rem">
-							<i class="icon icon-qianbao1 fz22rem"></i>
+							</i>
 						</div> <span>充值</span>
 				</a></li> 
 				<li class="box-flex-1"><a href="${ctx}/static/bookshelf.html">
@@ -89,15 +91,15 @@
 							<i class="icon icon-yuedu1"></i>
 						</div> <span>书架</span>--%>
 				</a></li>
-				<li class="box-flex-1"><a href=" ${ctx}/search">
+				<li class="box-flex-1"><a href=" ${ctx}/user/search">
 						<div class="nav-div sk">
-							<i class="icon icon-yuedu"></i>
+							<i class="icon icon-chakan"><!-- <i class="icon icon-yuedu"> --></i>
 						</div> <span>书库</span>
 				</a></li>
-				<li class="box-flex-1"><a href="${ctx}/static/search.html">
+				<li class="box-flex-1"><a href="${ctx}/user/login">
 						<div class="nav-div ss">
-							<i class="icon icon-chakan"></i>
-						</div> <span>搜索</span>
+							<i class="icon icon-yuedu1"></i>
+						</div> <span>我的</span>
 				</a></li>
 			</ul>
 		</nav>
@@ -109,7 +111,7 @@
 	<div class="section apps-free recharge-col">
 		<ul class="flex none text-center">
 			<c:forEach items="${cList }" var="content">
-				<li><a href="#">
+				<li><a href="javascript:window.location.href='${ctx }/user/detail?cId=${content.cId }'; ">
 						<figure>
 							<img src="${ctx}/${content.cPicStr}" class="img-bespread" style="height: 650px;" 
 								alt="loading">
@@ -127,14 +129,14 @@
 		</ul>
 	</div>
 	
-	<footer class="footer">
+	<footer class="footer" >
 		<ul class="none">
-			<li class=""><a href="#">登录</a></li>
-			<span class="fg">|</span>
-			<li class=""><a href="#">首页</a></li>
-			<span class="fg">|</span>
-			<li class=""><a href="#">充值</a></li>
-		</ul>
+        <li class=""><a href="${ctx }/user/login">登录</a></li>
+        <span class="fg">|</span>
+        <li class=""><a href="${ctx }/user/index">首页</a></li>
+        <span class="fg">|</span>
+        <li class=""><a href="${ctx }/user/search">搜索</a></li>
+    </ul>
 	</footer>
 </body>
 <script src="${ctx}/static/js/jquery.min.js"></script>

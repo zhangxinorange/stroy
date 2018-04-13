@@ -17,7 +17,7 @@
     <div class="flex flex-vc color-white book-detail-title">
         <div class="left" onclick="back()"><i class="icon-zuoleft157"></i></div>
         <div class="box-flex-1 title"><h4 class="fz14rem">${content.cTitle }</h4></div>
-        <div class="right"><a href="book-catalogue.html"><i class="icon-mulu"></i></a><span class="fg"></span><a href="../index.html"><i class="icon-zhuye1"></i></a></div>
+        <div class="right"><!-- <a href="book-catalogue.html"><i class="icon-mulu"></i></a> --><span class="fg"></span><a href="${ctx }/user/index"><i class="icon-zhuye1"></i></a></div>
     </div>
 </header>
 <!--书籍详情-->
@@ -30,8 +30,8 @@
             <li class="box-flex-1 book-read-setting setting-downfont"><i class="icon-fontm"></i>缩小字体</li>
         </ul>
     </div>
-    <article class="">
-    	${content.detail }
+    <article class="" style="line-height: 5rem;">
+    	${content.detailHtml }
     </article>
   <!--   <div class="flex text-center color-white">
         <a href="#" class="btn-page box-flex-1">上一章</a>
@@ -39,7 +39,7 @@
         <a href="#" class="btn-page box-flex-1">下一章</a>
     </div> -->
 </div>
-<!--推荐书籍-->
+<!--推荐书籍
 <div class="recommend mt1rem">
     <ul class="none">
         <li class="section flex mt1rem recharge-col">
@@ -61,15 +61,15 @@
             </div>
         </li>
     </ul>
-</div>
+</div> -->
 <!--底部-->
 <footer class="footer">
     <ul class="none">
-        <li class=""><a href="#">登录</a></li>
+        <li class=""><a href="${ctx }/user/login">登录</a></li>
         <span class="fg">|</span>
-        <li class=""><a href="#">首页</a></li>
+        <li class=""><a href="${ctx }/user/index">首页</a></li>
         <span class="fg">|</span>
-        <li class=""><a href="#">充值</a></li>
+        <li class=""><a href="${ctx }/user/search">搜索</a></li>
     </ul>
 </footer>
 </body>

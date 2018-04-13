@@ -18,13 +18,13 @@
     <div class="flex flex-vc color-white book-detail-title">
         <div class="left" onclick="back()"><i class="icon-zuoleft157"></i></div>
         <div class="box-flex-1 title"><h4 class="fz14rem">${content.cTitle }</h4></div>
-        <div class="right"><a href="#"><i class="icon-yuedu"></i></a><span class="fg"></span><a href="../index.html"><i class="icon-zhuye1"></i></a></div>
+        <div class="right"><a href="${ctx }/user/index"><i class="icon-yuedu"></i></a><span class="fg"></span><a href="${ctx }/user/index"><i class="icon-zhuye1"></i></a></div>
     </div>
 </header>
 <!--书籍详情-->
 <div class="section recharge-col book-detail-box flex">
     <div class="book-detail-img">
-        <img src="${ctx }${content.cPicStr }" alt="loading.." class="img-bespread">
+        <img src="${ctx }/${content.cPicStr }" alt="loading.." class="img-bespread">
     </div>
     <div class="box-flex-1 book-detail-info">
         <h4 class="none color-blue title">${content.cTitle }</h4>
@@ -97,11 +97,11 @@
 <!--底部-->
 <footer class="footer">
     <ul class="none">
-        <li class=""><a href="#">登录</a></li>
+        <li class=""><a href="${ctx }/user/login">登录</a></li>
         <span class="fg">|</span>
-        <li class=""><a href="#">首页</a></li>
+        <li class=""><a href="${ctx }/user/index">首页</a></li>
         <span class="fg">|</span>
-        <li class=""><a href="#">充值</a></li>
+        <li class=""><a href="${ctx }/user/search">搜索</a></li>
     </ul>
 </footer>
 </body>
@@ -175,6 +175,11 @@
     
     function read(){
     	window.location.href='${ctx}/user/read?cId=${content.cId}&mId=${member.mId}';
+    }
+    
+    function back()
+    {
+    	window.location.href="${ctx}/user/index";
     }
 </script>
 </html>
