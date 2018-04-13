@@ -8,8 +8,6 @@
 <c:set var="user"
 	value="<%=request.getSession().getAttribute(StroyContants.ADMIN_SESSION_KEY)%>" />
 
-<!DOCTYPE html>
-<html>
 
 <head>
 <title>小说列表</title>
@@ -116,7 +114,15 @@
 												<td>${content.cAuthor}</td>
 												<td>${content.typeStr}</td>
 												<td>${content.adminStr}</td>
-												<td>${content.cDesc}</td>
+												<td><%-- ${content.cDesc} --%>
+													<c:if test="${fn:length(content.cDesc)>12 }">  
+								                         ${fn:substring(content.cDesc, 0, 12)}...  
+								                   </c:if> <c:if test="${fn:length(content.cDesc)<=12 }">  
+								                         ${content.cDesc }  
+                  									 </c:if>
+												
+												
+												</td>
 												<td style="text-align: center;"><img alt=""
 													style="height: 50px;" src="${ctx }/${content.cPicStr}">
 												</td>

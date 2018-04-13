@@ -4,7 +4,6 @@
 <html lang="en">
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <c:set var="member" value="${sessionScope.member}" />
-<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -38,9 +37,9 @@
     </div>
 </div>
  <div class="section flex recharge-col book-operation">
-    <a href="bookshelf.html" class="btn btn-primary box-flex-1"><i class="icon-kongxin"></i>下载图书</a>
+    <a id="dLoadA" href="javascript:download();" class="btn btn-primary box-flex-1"><i class="icon-kongxin"></i>下载图书</a>
     <span class="fg"></span>
-    <a href="book-read.html" class="btn btn-success box-flex-1"><i class="icon-chakan"></i>开始阅读</a>
+    <a href="javascript:read();" class="btn btn-success box-flex-1"><i class="icon-chakan"></i>开始阅读</a>
 </div> 
 <!--书籍简介-->
 <div class="section recharge-col book-intro">
@@ -156,6 +155,26 @@
             var $this = $(this);
             $this.toggleClass('toggle rotate');
         });
+    }
+    function download()
+    {
+    	if('${member}'==''&&'${content.cAdmin}'==1)
+   		{
+   			if(confirm("小说${content.cTitle}需要您登陆才能下载,确定跳转登陆页面吗？"))
+ 			{
+ 				window.location.href='${ctx}/user/login?url=${content.cId}';
+ 			}
+   		}
+    	else
+   		{
+    		//$("#dLoadA").attr("target","_blank");
+    		//window.location.href='${ctx}/user/startDownload?cId=${content.cId}';
+    		window.open('${ctx}/user/startDownload?cId=${content.cId}&mId=${member.mId}','_blank');
+   		}
+    }
+    
+    function read(){
+    	window.location.href='${ctx}/user/read?cId=${content.cId}&mId=${member.mId}';
     }
 </script>
 </html>

@@ -1,6 +1,5 @@
 package com.zhangxin.mybatis.controller;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -145,7 +144,6 @@ public class StroyController {
 		Content content = new Content(cId,cTitle, cAuthor, cDesc,cAdmin);
 		if (!cPic.isEmpty() && cPic != null && cPic.getBytes() != null) {
 			content.setcPic(cPic.getBytes());
-
 			// 可以对user做一些操作如存入数据库
 			// 以下的代码是将文件file重新命名并存入Tomcat的webapps目录下项目的下级目录fileDir
 			String fileRealName = cPic.getOriginalFilename(); // 获得原始文件名;
@@ -154,8 +152,9 @@ public class StroyController {
 			UUID FileId = UUID.randomUUID(); // 生成文件的前缀包含连字符
 			String savedFileName = FileId.toString().replace("-", "").concat(fileSuffix); // 文件存取名
 			String savedDir = request.getSession().getServletContext().getRealPath(StroyContants.FILE_DIR); // 获取服务器指定文件存取路径
-			if (!new File(savedDir).exists()) {
-				new File(savedDir).mkdirs();
+			File dir=new File(savedDir);
+			if (!dir.exists()) {
+				dir.mkdirs();
 			}
 			File savedFile = new File(savedDir, savedFileName);
 			boolean isCreateSuccess = savedFile.createNewFile();

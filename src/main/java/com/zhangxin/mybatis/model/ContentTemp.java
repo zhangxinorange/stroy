@@ -169,6 +169,11 @@ public class ContentTemp {
 	 * 小说内容
 	 */
 	private String detail;
+	
+	/***
+	 * 小说内容
+	 */
+	private String detailHtml;
 
 	public String getDetail() {
 		return StringUtil.delHtmlTag(detail);
@@ -206,6 +211,14 @@ public class ContentTemp {
 
 	public void setAdminStr(String adminStr) {
 		this.adminStr = adminStr;
+	}
+
+	public String getDetailHtml() {
+		return detailHtml;
+	}
+
+	public void setDetailHtml(String detailHtml) {
+		this.detailHtml = detailHtml;
 	}
 	
 	

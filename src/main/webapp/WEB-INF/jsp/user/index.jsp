@@ -111,7 +111,7 @@
 			<c:forEach items="${cList }" var="content">
 				<li><a href="#">
 						<figure>
-							<img src="${ctx}/${content.cPicStr}" class="img-bespread"
+							<img src="${ctx}/${content.cPicStr}" class="img-bespread" style="height: 650px;" 
 								alt="loading">
 							<c:if test="${content.cAdmin eq 0 }">
 							<p>限时免费</p>

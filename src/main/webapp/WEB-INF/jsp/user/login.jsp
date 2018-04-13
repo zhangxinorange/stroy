@@ -2,7 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -81,7 +80,14 @@
 	                success: function (data) {
 	               		if(data.code==0)
 	            		{
-	               			window.location.href="${ctx}/user/index";
+	               			if('${returnUrl}'!='')
+               				{
+	               				window.location.href='${ctx}/user/detail?cId=${returnUrl}';
+               				}
+	               			else
+	               			{
+	               				window.location.href="${ctx}/user/index";
+	               			}
 	            		}
 	               		else
 	              		{
