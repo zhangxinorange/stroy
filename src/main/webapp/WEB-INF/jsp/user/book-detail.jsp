@@ -66,8 +66,8 @@
 <div class="section recharge-col mt1rem book-mulu">
     <h3 class="fz2rem book-detail-titles"><i class="icon-mulu"></i>评论</h3>
     <div class="book-all-mulu color-blue"><i class="icon-xia pull-right"></i>全部评论</div>
-    <ul class="none book-mulu-items fz16rem">
-        <li>
+    <ul class="none book-mulu-items fz16rem" id="repicst">
+        <!-- <li>
         	<h4 class="none">张三</h4>
             <p class="none">好看好看还想再看！</a></p>
         </li>
@@ -78,11 +78,11 @@
         <li>
         	<h4 class="none">张三</h4>
             <p class="none">好看好看还想再看！</a></p>
-        </li>
+        </li> -->
     </ul>    
     <div class="recharge-col">
-    	<textarea maxlength="500" style="border: solid 2px cadetblue;width: 100%;height: 150px;">请发表您的看法！</textarea>
-        <a href="javascript:;" class="btn btn-primary btn-block go-to-recharge">发布</a>
+    	<textarea maxlength="500" id="msgText" style="border: solid 2px cadetblue;width: 100%;height: 150px;">请发表您的看法！</textarea>
+        <a href="javascript: saveMsg();"  class="btn btn-primary btn-block go-to-recharge">发布</a>
     </div>
 </div>
 <!--搜索框
@@ -114,6 +114,7 @@
         toggle_mulu();
         init_subStr(article,text,50);
         toggle_intro(article,text,50);
+        getALLMsg();
     })
     //展开更多介绍
     function toggle_intro(ele, alltext,len ){
@@ -180,6 +181,78 @@
     function back()
     {
     	window.location.href="${ctx}/user/index";
+    }
+    function getALLMsg()
+    {
+    	var cId='${content.cId}';
+    	$.ajax({
+            url: "${ctx}/user/allMsg",
+            data: { cId: cId}, 
+            type: "post",
+            dataType:'json',
+            success: function (data) {
+           		if(data.code==0)
+        		{
+           			/* window.location.href="${ctx}/user/index"; */
+           			debugger;
+           			$("#repicst").empty();
+           		 var html="";
+           		 $.each(data.data, function(idx, obj) {
+           			 
+           			html+="<li><h4 class=none'>"+obj.mName+"</h4>"
+           			html+="<p class=\"none\">"+obj.mContent+"</a></p></li>";
+           			});
+           		 $("#repicst").html(html);
+           			
+        		}
+           		else
+          		{
+          			alert(data.msg);
+          			location.reload();
+          		}
+           		
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseText);
+            }
+        });
+    }
+    function saveMsg()
+    {
+    	if('${member}'=="")
+   		{
+   			alert("登录后才能评价呦");
+   			return;
+   		}
+    	var cId='${content.cId}';
+    	var text=$("#msgText").val();
+    	if(text==""||text=="请发表您的看法！")
+   		{
+   			alert("请填写评论后再保存");
+   			return;
+   		}
+    	$.ajax({
+            url: "${ctx}/user/saveMsg",
+            data: { cId: cId,msg:text}, 
+            type: "post",
+            dataType:'json',
+            success: function (data) {
+           		if(data.code==0)
+        		{
+           			confirm("评论成功");
+           			getALLMsg();
+        		}
+           		else
+          		{
+          			alert(data.msg);
+          			location.reload();
+          		}
+           		
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseText);
+            }
+        });
     }
 </script>
 </html>

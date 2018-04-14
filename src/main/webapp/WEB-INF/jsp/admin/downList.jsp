@@ -43,7 +43,7 @@
                                         <a tabindex="-1" href="#">Profile</a>
                                     </li> -->
 								<li class="divider"></li>
-								<li><a tabindex="-1" href="login.html">退出</a></li>
+								<li><a tabindex="-1" href="javascript: window.location.href='${ctx }/admin/loginOut'">退出</a></li>
 							</ul></li>
 					</ul>
 					<ul class="nav">
@@ -60,17 +60,17 @@
 				<ul class="nav nav-list bs-docs-sidenav nav-collapse collapse">
 					<li ><a href="${ctx }/stroy/list"><i
 							class="icon-chevron-right"></i> 小说文章管理</a></li>
-					<li><a href="${ctx }/type/list"><i class="icon-chevron-right"></i>
+					<li ><a href="${ctx }/type/list"><i class="icon-chevron-right"></i>
 							文章类别</a></li>
-					<li><a href="stats.html"><i class="icon-chevron-right"></i>
+					<li ><a href="${ctx }/admin/memberList"><i class="icon-chevron-right"></i>
 							注册用户管理</a></li>
 					<li class="active"><a href="${ctx }/stroy/downList" ><i class="icon-chevron-right"></i>
 							下载量查询</a></li>
 					<li><a href="${ctx }/stroy/readList"><i class="icon-chevron-right"></i>
 							阅读量查询</a></li>
-					<li><a href="buttons.html"><i class="icon-chevron-right"></i>
+					<li><a href="${ctx }/news/newsList"><i class="icon-chevron-right"></i>
 							新闻通知管理</a></li>
-					<li><a href="interface.html"><i class="icon-chevron-right"></i>
+					<li><a href="${ctx }/news/messageList"><i class="icon-chevron-right"></i>
 							文章评论</a></li>
 				</ul>
 			</div>

@@ -13,4 +13,33 @@
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="m_create_date" jdbcType="TIMESTAMP" property="mCreateDate" />
   </resultMap>
+  
+  <resultMap id="BaseResultMap_1" type="com.zhangxin.mybatis.model.MessageTemp">
+    <result column="m_Id" jdbcType="BIGINT" property="mId" />
+    <result column="member_Id" jdbcType="BIGINT" property="memberId" />
+    <result column="c_iD" jdbcType="BIGINT" property="cId" />
+    <result column="r_Id" jdbcType="BIGINT" property="rId" />
+    <result column="m_content" jdbcType="VARCHAR" property="mContent" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+     <result column="m_Name" jdbcType="VARCHAR" property="mName" />
+     <result column="c_title" jdbcType="VARCHAR" property="cTitle" />
+    <result column="m_create_date" jdbcType="TIMESTAMP" property="mCreateDate" />
+  </resultMap>
+  
+  <select id="getAllMsg" resultMap="BaseResultMap_1">
+  	SELECT m.*,b.`m_Name`,c.`c_title` FROM message m LEFT JOIN member b  ON b.`m_Id`=m.`member_Id`
+LEFT JOIN content c ON c.`c_Id`=m.`c_iD` ORDER BY m.c_Id, m.`m_create_date` DESC 
+limit #{start},#{end}
+  </select>
+  
+  
+  <select id="getCountAllMsg" resultType="integer">
+  	select count(*) from message 
+  </select>
+  
+  <delete id="deleteMsg">
+  	delete from message  where m_Id=#{0}
+  </delete>
+  
+  
 </mapper>

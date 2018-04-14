@@ -45,7 +45,7 @@
 							</ul></li>
 					</ul>
 					<ul class="nav">
-						<li class="active"><a href="#">文章类别管理</a></li>
+						<li class="active"><a href="#">新闻管理</a></li>
 					</ul>
 				</div>
 				<!--/.nav-collapse -->
@@ -58,7 +58,7 @@
 				<ul class="nav nav-list bs-docs-sidenav nav-collapse collapse">
 					<li ><a href="${ctx }/stroy/list"><i
 							class="icon-chevron-right"></i> 小说文章管理</a></li>
-					<li class="active"><a href="${ctx }/type/list"><i class="icon-chevron-right"></i>
+					<li ><a href="${ctx }/type/list"><i class="icon-chevron-right"></i>
 							文章类别</a></li>
 					<li ><a href="${ctx }/admin/memberList"><i class="icon-chevron-right"></i>
 							注册用户管理</a></li>
@@ -66,7 +66,7 @@
 							下载量查询</a></li>
 					<li><a href="${ctx }/stroy/readList"><i class="icon-chevron-right"></i>
 							阅读量查询</a></li>
-					<li><a href="${ctx }/news/newsList"><i class="icon-chevron-right"></i>
+					<li class="active"><a href="${ctx }/news/newsList"><i class="icon-chevron-right"></i>
 							新闻通知管理</a></li>
 					<li><a href="${ctx }/news/messageList"><i class="icon-chevron-right"></i>
 							文章评论</a></li>
@@ -80,17 +80,25 @@
                         <!-- block -->
                         <div class="block">
                             <div class="navbar navbar-inner block-header">
-                                <div class="muted pull-left">维护文章</div>
+                                <div class="muted pull-left">维护新闻</div>
                             </div>
                             <div class="block-content collapse in">
                                 <div class="span12">
-                                     <form class="form-horizontal" action="${ctx }/type/save" method="post">
+                                     <form class="form-horizontal" action="${ctx }/news/saveNews" method="post">
                                       <fieldset>
-                                        <legend>小说类别管理</legend>
+                                        <legend>新闻管理</legend>
                                         <div class="control-group">
-                                          <label class="control-label" for="focusedInput">类别名称</label>
+                                          <label class="control-label" for="focusedInput">新闻标题</label>
                                           <div class="controls">
-                                            <input class="input-xlarge focused" id="tName" name="tName" type="text" >
+                                            <input class="input-xlarge focused" id="nTitle" name="nTitle" type="text" >
+                                          </div>
+                                        </div>
+                                         <div class="control-group">
+                                          <label class="control-label" for="focusedInput">新闻内容</label>
+                                          <div class="controls">
+                                            <!-- <input class="input-xlarge focused" id="nName" name="nName" type="text" > -->
+                                           	<textarea id="nContent" name="nContent" rows="6" cols="200" style="width: 50rem;">
+                                           	</textarea>
                                           </div>
                                         </div>
                                          <div class="form-actions">
@@ -146,10 +154,10 @@
         $(function() {
             
             $(".btn-primary").click(function(){
-            	var title =$("#cName").val();
+            	var title =$("#nName").val();
             	if(title=="")
             		{
-            		alert("文章标题不能为空");
+            		alert("新闻标题不能为空");
             		return;
             		}
             	$(".form-horizontal").submit();

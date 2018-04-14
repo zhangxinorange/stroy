@@ -65,6 +65,7 @@ public class StroyController {
 		// return "/admin/stroyList";
 		ModelAndView result = new ModelAndView("/admin/stroyList");
 		List<Content> contentList = contentService.selectByContent(content, page, rows);
+		System.out.println(request.getSession().getServletContext().getRealPath(StroyContants.FILE_DIR));
 		List<ContentTemp> cList=getTmepList(request, contentList);
 		PageInfo<Content> pago=new PageInfo<Content>(contentList);
 		result.addObject("pageInfo", pago);
@@ -112,6 +113,7 @@ public class StroyController {
 	public ModelAndView gotoEdit(HttpServletRequest request,HttpServletResponse response,Long cId,ModelMap map) 
 	{
 		Content content=contentService.selectByKey(cId);
+		content=changePic(content, request);
 		ContentTemp testB = new ContentTemp();
 		BeanUtils.copyProperties(content, testB);
 		testB.setDetail(new String(testB.getcContent()));
@@ -133,6 +135,8 @@ public class StroyController {
 		
 		return result;
 	}
+	
+	
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public String save(HttpServletRequest request, HttpServletResponse response, String cTitle, String cAuthor,
@@ -248,7 +252,7 @@ public class StroyController {
 				}
 				testB.setTypeStr(tyepStr.toString());
 				if (testB.getcPicStr() != null && testB.getcPic() != null) {
-					String puff=request.getSession().getServletContext().getRealPath(StroyContants.FILE_DIR);
+					/*String puff=request.getSession().getServletContext().getRealPath(StroyContants.FILE_DIR);
 					String real = puff.substring(0, puff.indexOf(StroyContants.FILE_DIR)-1) + testB.getcPicStr();
 					File file = new File(real);
 					if (!file.exists()) {
@@ -293,7 +297,7 @@ public class StroyController {
 						testB.setcPicStr(savedDir);
 						contentService.updateAll(con);
 						
-					}
+					}*/
 				}
 				list.add(testB);
 			}
@@ -301,5 +305,58 @@ public class StroyController {
 		}
 		return list;
 	}
-	
+	private Content changePic(Content con,HttpServletRequest request) {
+		if (con.getcPicStr() != null && con.getcPic() != null) {
+			String puff=request.getSession().getServletContext().getRealPath(StroyContants.FILE_DIR);
+			String real = puff.substring(0, puff.indexOf(StroyContants.FILE_DIR)-1) + con.getcPicStr();
+			File file = new File(real);
+			if (!file.exists()) {
+				byte[] cPic = con.getcPic();
+
+				UUID FileId = UUID.randomUUID(); // 生成文件的前缀包含连字符
+				String savedFileName = FileId.toString().replace("-", "").concat(".jpg"); /*"a.jpg"; */// 文件存取名
+				String savedDir = request.getSession().getServletContext().getRealPath(StroyContants.FILE_DIR); // 获取服务器指定文件存取路径
+				String realPath=savedDir+ con.getcPicStr().substring(8, con.getcPicStr().length());
+				File dir=new File(savedDir);
+				if (!dir.exists()) {
+					dir.mkdirs();
+				}
+				File savedFile = new File(realPath);
+				BufferedOutputStream bos = null;
+				FileOutputStream fos = null;
+				try {
+					boolean isCreateSuccess = savedFile.createNewFile();
+					if (isCreateSuccess) {
+						fos = new FileOutputStream(file);
+						bos = new BufferedOutputStream(fos);
+						bos.write(cPic);
+					}
+					else {
+						System.out.println("ee");
+					}
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} finally {
+					try {
+						if (bos != null) {
+							bos.close();
+						}
+						if (fos != null) {
+							fos.close();
+						}
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+
+				String saveDIr = File.separator + StroyContants.FILE_DIR + File.separator + savedFileName;
+				//con.setcPicStr(saveDIr);
+				//contentService.updateNotNull(con);
+				
+			}
+		}
+		return con;
+	}
 }

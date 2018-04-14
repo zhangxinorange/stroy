@@ -7,34 +7,27 @@ import javax.persistence.*;
  * @author pc
  *
  */
-@Table(name = "message")
-public class Message {
-    @Column(name = "m_Id")
-    @GeneratedValue(generator = "JDBC")
+public class MessageTemp {
     private Long mId;
 
     /**
      * 发言人
      */
-    @Column(name = "member_Id")
     private Long memberId;
 
     /**
      * 小说Id
      */
-    @Column(name = "c_iD")
     private Long cId;
 
     /**
      * 发言对象
      */
-    @Column(name = "r_Id")
     private Long rId;
 
     /**
      * 留言内容
      */
-    @Column(name = "m_content")
     private String mContent;
 
     /**
@@ -45,8 +38,6 @@ public class Message {
     /**
      * 留言时间
      */
-    @Column(name = "m_create_date")
-    @OrderBy("desc")
     private Date mCreateDate;
 
     /**
@@ -170,4 +161,26 @@ public class Message {
     public void setmCreateDate(Date mCreateDate) {
         this.mCreateDate = mCreateDate;
     }
+    private String mName;
+
+	public String getmName() {
+		return mName;
+	}
+
+	public void setmName(String mName) {
+		this.mName = mName;
+	}
+	
+	private String cTitle;
+
+	public String getcTitle() {
+		return cTitle;
+	}
+
+	public void setcTitle(String cTitle) {
+		this.cTitle = cTitle;
+	}
+	
+	
+    
 }

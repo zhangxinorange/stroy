@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <!DOCTYPE html>
 <html lang="en">
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
@@ -46,15 +47,30 @@
 		</div>
 	</header>
 	<!--导航-->
-	<div class="banner">
+	<div class="banner" style="height: 20rem;">
 		<div class="swiper-container">
 			<!--banner图懒加载 data.src-->
 			<div class="swiper-wrapper">
-				<c:forEach items="${lunbo }" var="content">
+				<c:forEach items="${lunbo }" var="news">
 					<div class="swiper-slide" style="text-align: center;">
-					<a href="javascript:window.location.href='${ctx }/user/detail?cId=${content.cId }'; "><img data-src="${ctx}/${content.cPicStr}" alt=""
+					<%-- <a href="javascript:window.location.href='${ctx }/user/detail?cId=${content.cId }'; "><img data-src="${ctx}/${content.cPicStr}" alt=""
 						class="img-bespread swiper-lazy" style="width: 100%;height: 30rem;"/></a>
-					<div class="swiper-lazy-preloader"></div>
+					<div class="swiper-lazy-preloader"></div> --%>
+					<a href="#">
+					
+						<div style="text-align: center;"><h2>${news.nTitle } </h2></div>
+						<c:if test="${fn:length(news.nContent)>1000 }">  
+								                         <div style="text-align: center;font-size: 0.7rem;">${news.nContent}</div>  
+								                   </c:if>
+						<c:if test="${fn:length(news.nContent)<1000 && fn:length(news.nContent)>500}">  
+								                         <div style="text-align: center;font-size: 1.0rem;">${news.nContent}</div>  
+								                   </c:if>		                   
+								                   
+								                    <c:if test="${fn:length(news.nContent)<=500 }">  
+								                         <div style="text-align: center;font-size: 1.4rem;">${news.nContent}</div>
+                  									 </c:if>
+						
+					</a>
 				</div>
 				
 				</c:forEach>

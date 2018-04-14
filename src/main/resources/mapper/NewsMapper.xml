@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhangxin.mybatis.mapper.NewsMapper">
+  <resultMap id="BaseResultMap" type="com.zhangxin.mybatis.model.News">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="n_Id" jdbcType="BIGINT" property="nId" />
+    <result column="n_title" jdbcType="VARCHAR" property="nTitle" />
+    <result column="n_create_date" jdbcType="TIMESTAMP" property="nCreateDate" />
+    <result column="n_content" jdbcType="LONGVARCHAR" property="nContent" />
+  </resultMap>
+  
+  
+  <select id="getAllNews" resultMap="BaseResultMap">
+SELECT * FROM news n ORDER BY n.`n_create_date` DESC LIMIT #{start},#{end}  
+  </select>
+  
+  
+  <select id="getcountAllNews" resultType="integer">
+		SELECT count(*) FROM news 
+  </select>
+  
+</mapper>

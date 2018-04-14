@@ -7,21 +7,20 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.zhangxin.mybatis.mapper.MessageMapper;
-import com.zhangxin.mybatis.model.Message;
-import com.zhangxin.mybatis.model.MessageTemp;
-import com.zhangxin.mybatis.service.MessageService;
+import com.zhangxin.mybatis.mapper.NewsMapper;
+import com.zhangxin.mybatis.model.News;
+import com.zhangxin.mybatis.service.INewsService;
 
 @Service
-public class MessageServiceImpl extends BaseService<Message> implements MessageService {
+public class NewsServiceImpl extends BaseService<News> implements INewsService {
 	
 	@Autowired
-	private MessageMapper messageMapper;
+	private NewsMapper newsMapper;
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public Map getAllMsg(Integer pageIndex, Integer pageSize) {
-		Integer total=messageMapper.getCountAllMsg();
+	public Map getAllNews(Integer pageIndex, Integer pageSize) {
+		Integer total=newsMapper.getcountAllNews();
 		if (pageSize==null) {
 			pageSize=5;
 		}
@@ -38,7 +37,7 @@ public class MessageServiceImpl extends BaseService<Message> implements MessageS
 		Map hashmap=new HashMap<>();
 		hashmap.put("start", start);
 		hashmap.put("end", end);
-		List<MessageTemp> oList=messageMapper.getAllMsg(hashmap);
+		List<News> oList=newsMapper.getAllNews(hashmap);
 		Map result=new HashMap<>();
 		result.put("data", oList);
 		result.put("total", total);
@@ -47,10 +46,4 @@ public class MessageServiceImpl extends BaseService<Message> implements MessageS
 		return result;
 	}
 
-	@Override
-	public void deleteMsg(Long mId) {
-		messageMapper.deleteMsg(mId);
-	}
-
-	
 }

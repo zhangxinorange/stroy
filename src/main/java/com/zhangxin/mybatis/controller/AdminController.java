@@ -53,6 +53,13 @@ public class AdminController {
 			return ResultUtil.error(2, "用户名密码错误");
 		}
 	}
+	@RequestMapping(value = "/loginOut", method = RequestMethod.GET)
+	public String loginOUt(HttpServletRequest request)
+	{
+		request.getSession().removeAttribute(StroyContants.ADMIN_SESSION_KEY);
+		
+		return "redirect:/admin/login";
+	}
 	@RequestMapping(value = "/memberList", method = RequestMethod.GET)
     public ModelAndView getList(Member member,
                                 @RequestParam(required = false, defaultValue = "1") int page,

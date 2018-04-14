@@ -25,13 +25,17 @@ import com.zhangxin.mybatis.model.Content;
 import com.zhangxin.mybatis.model.ContentTemp;
 import com.zhangxin.mybatis.model.Download;
 import com.zhangxin.mybatis.model.Member;
+import com.zhangxin.mybatis.model.Message;
+import com.zhangxin.mybatis.model.MessageTemp;
 import com.zhangxin.mybatis.model.ReadContent;
 import com.zhangxin.mybatis.model.Type;
 import com.zhangxin.mybatis.service.ContentService;
 import com.zhangxin.mybatis.service.DownLoadService;
+import com.zhangxin.mybatis.service.INewsService;
 import com.zhangxin.mybatis.service.IReadService;
 import com.zhangxin.mybatis.service.ITypeService;
 import com.zhangxin.mybatis.service.MemberService;
+import com.zhangxin.mybatis.service.MessageService;
 import com.zhangxin.mybatis.util.Result;
 import com.zhangxin.mybatis.util.ResultUtil;
 import com.zhangxin.mybatis.util.StringUtil;
@@ -56,13 +60,21 @@ public class CustomerController {
 	@Autowired
 	private DownLoadService downLoadService;
 	
+	@Autowired
+	private INewsService newsService;
+	
+	
+	@Autowired
+	private MessageService messageService;
+	
 
 	@RequestMapping(value = { "", "/index" })
 	public ModelAndView index(HttpServletRequest request, HttpServletResponse response) {
-		List<Content> cList = contentService.selectByContent(new Content(), 1, 3);
+		//List<Content> cList = contentService.selectByContent(new Content(), 1, 3);
+		Map nMap=newsService.getAllNews(1, 3);
 		Map dList = contentService.selectContentByDownLoad(1, 3, true, null, null);
 		ModelAndView view = new ModelAndView("/user/index");
-		view.addObject("lunbo", cList);
+		view.addObject("lunbo", nMap.get("data"));
 		view.addObject("cList", dList.get("data"));
 		return view;
 	}
@@ -314,5 +326,42 @@ public class CustomerController {
 			return ResultUtil.error(2, "注册用邮箱已经存在，请重新输入");
 		}
 		return ResultUtil.success();
+	}
+	
+	@RequestMapping(value="/saveMsg",method=RequestMethod.POST)
+	public @ResponseBody Result saveMessage(HttpServletRequest request,HttpServletResponse response,String msg,Long cId)
+	{
+		Member member=(Member)request.getSession().getAttribute(StroyContants.USER_SESSION_key);
+		if (member==null) {
+			return ResultUtil.error(3, "用户未登录，不能评论");
+		}
+		Message message=new Message();
+		message.setcId(cId);
+		message.setmContent(msg);
+		message.setMemberId(member.getmId());
+		message.setStatus(0);
+		messageService.save(message);
+		
+		return ResultUtil.success();
+	}
+	@RequestMapping(value="/allMsg",method=RequestMethod.POST)
+	public @ResponseBody Result getAllMsg(HttpServletRequest request,HttpServletResponse response,Long cId)
+	{
+		Message message=new Message();
+		message.setcId(cId);
+		List<Message> msgList=messageService.selectByT(message);
+		List<MessageTemp> tList=new ArrayList<>();
+		if (msgList!=null&&msgList.size()>0) {
+			for (Message msg : msgList) {
+				MessageTemp temp=new MessageTemp();
+				BeanUtils.copyProperties(msg, temp);
+				if (temp.getMemberId()!=null) {
+					Member member=memberService.selectByKey(temp.getMemberId());
+					temp.setmName(member.getmName());
+				}
+				tList.add(temp);
+			}
+		}
+		return ResultUtil.success(tList);
 	}
 }
