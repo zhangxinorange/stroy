@@ -68,11 +68,15 @@
         </li> -->
     </ul>
     <form id="from1" action="${ctx }/user/regist" method="post">
-    	<div>用户名：<input type="text" name="mName" id="mName"/></div>
-    	<div>登录邮箱：<input type="text" name="mEmail" id="mEmail"/></div>
-    	<div>手机号：<input type="text" name="mPhone" id="mPhone"/></div>
-         <div>密码：<input type="password" name="mPassword" id="mPassword"/><input type="hidden" name="mType" id="mType" value="1"/></div>
-         <input type="button" id="regist" title="注册" value="注册"></div>
+    	<div><input type="text" name="mName" id="mName" class="inp inp-block search-inp" placeholder="用户名"/></div>
+    	</br> 
+    	<div><input type="text" name="mEmail" id="mEmail" class="inp inp-block search-inp" placeholder="登录邮箱"/></div>
+    	</br> 
+    	<div><input type="text" name="mPhone" id="mPhone" class="inp inp-block search-inp" placeholder="手机号"/></div>
+    	</br> 
+         <div><input type="password" name="mPassword" id="mPassword" class="inp inp-block search-inp" placeholder="密码"/><input type="hidden" name="mType" id="mType" value="1"/></div>
+         </br> 
+         <input type="button" class="btn btn-primary btn-block go-to-recharge" id="regist" title="注册" value="注册"></div>
 	</form>
 </div>
 </body>

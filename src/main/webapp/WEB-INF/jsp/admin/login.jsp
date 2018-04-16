@@ -15,17 +15,17 @@
     <![endif]
     <script src="${ctx }/static/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>-->
   </head>
-  <body id="login">
-    <div class="container">
-
+  <body id="login" style="background: url('${ctx}/static/images/1@2x.jpg')top center no-repeat;">
+    <div style="margin-top: 13%;">
+		
       <form class="form-signin" method="post">
-        <h2 class="form-signin-heading">用户登录</h2>
+        <h2 class="form-signin-heading">后台登录</h2>
         <input type="text" name="mEmail" class="input-block-level" placeholder="登录邮箱">
         <input type="password" name="mPassword" class="input-block-level" placeholder="密码">
         <label class="checkbox">
           <input type="checkbox" value="remember-me"> 记住密码
         </label>
-        <button class="btn btn-large btn-primary" type="button">登录</button>
+        <button class="btn btn-large btn-block btn-primary" type="button">登录</button>
       </form>
 
     </div> <!-- /container -->

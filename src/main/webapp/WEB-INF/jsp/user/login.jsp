@@ -67,9 +67,31 @@
         	<input type="button" id="loginCoustmer"/>登录
         </li> -->
     </ul>
-    <div>邮箱：<input type="text" name="userName" id="userName"/></div>
-         <div>密码：<input type="password" name="password" id="password"/></div>
-         <div style="margin-left: 50px;"><input type="button" id="loginCoustmer" title="登录" value="登录">&nbsp;<input type="button" id="regist" title="注册" value="注册"></div>
+    <!-- <div class="search-box">
+    <div class="search">
+        <form action="#" method="get">
+        <input type="text" class="inp inp-block search-inp" placeholder="请输入关键字">
+        <input type="submit" class="btn search-btn" value="搜索">
+        </form>
+    </div>
+</div> -->
+    <div >
+    	<div>
+    	<input type="text" class="inp inp-block search-inp" placeholder="用户名" name="userName" id="userName"/> 
+    	</br>   	
+    	<input type="password" class="inp inp-block search-inp" placeholder="密码" name="password" id="password"/>
+    	</br>    	
+    	</div>
+    	<div class="recharge-col">
+        <input type="button" class="btn btn-primary btn-block go-to-recharge" id="loginCoustmer" title="登录" value="登录">
+   		</div>
+    </div>    
+    
+         <!-- <div>密码：<input type="password" name="password" id="password"/></div> -->
+         <p class="text-center select-recharge-info">
+         	<a id="regist">新用户注册</a>
+    	</p>
+		
 </div>
 </body>
 <script src="${ctx }/static/js/jquery.min.js"></script>
