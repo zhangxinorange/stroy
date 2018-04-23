@@ -65,7 +65,6 @@ public class StroyController {
 		// return "/admin/stroyList";
 		ModelAndView result = new ModelAndView("/admin/stroyList");
 		List<Content> contentList = contentService.selectByContent(content, page, rows);
-		System.out.println(request.getSession().getServletContext().getRealPath(StroyContants.FILE_DIR));
 		List<ContentTemp> cList=getTmepList(request, contentList);
 		PageInfo<Content> pago=new PageInfo<Content>(contentList);
 		result.addObject("pageInfo", pago);

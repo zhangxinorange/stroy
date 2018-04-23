@@ -19,7 +19,7 @@
 <body>
 <header class="header flex flex-vc">
     <div class="l"><a href="${ctx }/user/index"><i class="icon-zhuye1"></i></a></div>
-    <div class="c box-flex-1 text-center"><h1>哈哈哈中午网</h1></div>
+    <div class="c box-flex-1 text-center"><h1>小说在线</h1></div>
     <div class="r text-right">
     	<c:choose>
 				<c:when test="${empty member }">

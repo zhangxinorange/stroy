@@ -15,6 +15,16 @@
 <link rel="stylesheet" href="${ctx}/static/css/style.min.css">
 <link rel="stylesheet" href="${ctx}/static/css/swiper.min.css">
 <script src="${ctx}/static/js/loading.js"></script>
+<style type="text/css">
+.facu {
+	/* white-space: nowrap;
+	word-break：break-all;
+	text-overflow: ellipsis;
+	-o-text-overflow: ellipsis;
+	overflow: hidden;
+	line-height: 2rem; */
+}
+</style>
 </head>
 <body>
 	<header class="header flex flex-vc">
@@ -30,51 +40,54 @@
 					<a href="${ctx}/user/login"><i class="icon-zhuye"></i></a>
 				</c:when>
 				<c:otherwise>
-				<form id="forq" action="${ctx }/user/userCenter" method="post">
-					<table>
-						<tr>
-						<td><a style="font-size: 1.3rem;" href="javascript:$('#forq').submit();">${member.mName }</a></td></tr>
-						
-						<tr>
-						<td><a style="font-size: 0.8rem;"  href="javascript:loginOut();" >退出登录</a></td></tr>
-					</table>
+					<form id="forq" action="${ctx }/user/userCenter" method="post">
+						<table>
+							<tr>
+								<td><a style="font-size: 1.3rem;"
+									href="javascript:$('#forq').submit();">${member.mName }</a></td>
+							</tr>
+
+							<tr>
+								<td><a style="font-size: 0.8rem;"
+									href="javascript:loginOut();">退出登录</a></td>
+							</tr>
+						</table>
 					</form>
 				</c:otherwise>
 			</c:choose>
-		
-		
-			
+
+
+
 		</div>
 	</header>
 	<!--导航-->
-	<div class="banner" style="height: 20rem;">
-		<div class="swiper-container">
+	<div class="banner facu" style="height: 22rem;">
+		<div class="swiper-container" style="height: 100%;">
 			<!--banner图懒加载 data.src-->
 			<div class="swiper-wrapper">
 				<c:forEach items="${lunbo }" var="news">
 					<div class="swiper-slide" style="text-align: center;">
-					<%-- <a href="javascript:window.location.href='${ctx }/user/detail?cId=${content.cId }'; "><img data-src="${ctx}/${content.cPicStr}" alt=""
+						<%-- <a href="javascript:window.location.href='${ctx }/user/detail?cId=${content.cId }'; "><img data-src="${ctx}/${content.cPicStr}" alt=""
 						class="img-bespread swiper-lazy" style="width: 100%;height: 30rem;"/></a>
 					<div class="swiper-lazy-preloader"></div> --%>
-					<a href="#">
-					
-						<div style="text-align: center;"><h2>${news.nTitle } </h2></div>
-						<c:if test="${fn:length(news.nContent)>1000 }">  
-								                         <div style="text-align: center;font-size: 0.7rem;">${news.nContent}</div>  
-								                   </c:if>
-						<c:if test="${fn:length(news.nContent)<1000 && fn:length(news.nContent)>500}">  
-								                         <div style="text-align: center;font-size: 1.0rem;">${news.nContent}</div>  
-								                   </c:if>		                   
-								                   
-								                    <c:if test="${fn:length(news.nContent)<=500 }">  
-								                         <div style="text-align: center;font-size: 1.4rem;">${news.nContent}</div>
-                  									 </c:if>
-						
-					</a>
-				</div>
-				
+						<a href="#">
+
+							<div style="text-align: center;">
+								<h2>${news.nTitle }</h2>
+							</div> <c:if test="${fn:length(news.nContent)>1000 }">
+								<div style="text-align: center; font-size: 0.7rem;">${news.nContent}</div>
+							</c:if> <c:if
+								test="${fn:length(news.nContent)<1000 && fn:length(news.nContent)>500}">
+								<div style="text-align: center; font-size: 1.0rem;">${news.nContent}</div>
+							</c:if> <c:if test="${fn:length(news.nContent)<=500 }">
+								<div style="text-align: center; font-size: 1.4rem;">${news.nContent}</div>
+							</c:if>
+
+						</a>
+					</div>
+
 				</c:forEach>
-				
+
 				<%-- <div class="swiper-slide">
 					<img data-src="${ctx}/static/images/banner.jpg" alt=""
 						class="img-bespread swiper-lazy" />
@@ -106,10 +119,13 @@
 						<div class="nav-div sj">
 							<i class="icon icon-yuedu1"></i>
 						</div> <span>书架</span>--%>
-				</a></li>
+				</a>
+				</li>
 				<li class="box-flex-1"><a href=" ${ctx}/user/search">
 						<div class="nav-div sk">
-							<i class="icon icon-chakan"><!-- <i class="icon icon-yuedu"> --></i>
+							<i class="icon icon-chakan">
+								<!-- <i class="icon icon-yuedu"> -->
+							</i>
 						</div> <span>书库</span>
 				</a></li>
 				<li class="box-flex-1"><a href="${ctx}/user/login">
@@ -122,81 +138,81 @@
 	</div>
 	<!--限时免费-->
 	<div class="public-title section mt1rem">
-		<h2 class="none fz16rem"><b style="text-align: left;">下载排行</b><b style="text-align: right;float:right"><a style="font-size: 0.8rem;" href="javascript: window.location.href='${ctx }/user/gotoDown'">查看更多</a></b></h2>
+		<h2 class="none fz16rem">
+			<b style="text-align: left;">下载排行</b><b
+				style="text-align: right; float: right"><a
+				style="font-size: 0.8rem;"
+				href="javascript: window.location.href='${ctx }/user/gotoDown'">查看更多</a></b>
+		</h2>
 	</div>
 	<div class="section apps-free recharge-col">
 		<ul class="flex none text-center">
 			<c:forEach items="${cList }" var="content">
-				<li><a href="javascript:window.location.href='${ctx }/user/detail?cId=${content.cId }'; ">
+				<li><a
+					href="javascript:window.location.href='${ctx }/user/detail?cId=${content.cId }'; ">
 						<figure>
-							<img src="${ctx}/${content.cPicStr}" class="img-bespread" style="height: 650px;" 
-								alt="loading">
+							<img src="${ctx}/${content.cPicStr}" class="img-bespread"
+								style="height: 25rem;" alt="loading">
 							<c:if test="${content.cAdmin eq 0 }">
-							<p>限时免费</p>
+								<p>限时免费</p>
 							</c:if>
 							<c:if test="${content.cAdmin eq 1 }">
-							<p>会员专享</p>
+								<p>会员专享</p>
 							</c:if>
 						</figure>
 						<h5 class="none">${content.cTitle}</h5>
 				</a></li>
-			
+
 			</c:forEach>
 		</ul>
 	</div>
-	
+
 	<footer class="footer" >
 		<ul class="none">
-        <li class=""><a href="${ctx }/user/login">登录</a></li>
-        <span class="fg">|</span>
-        <li class=""><a href="${ctx }/user/index">首页</a></li>
-        <span class="fg">|</span>
-        <li class=""><a href="${ctx }/user/search">搜索</a></li>
-    </ul>
+			<li class=""><a href="${ctx }/user/login">登录</a></li>
+			<span class="fg">|</span>
+			<li class=""><a href="${ctx }/user/index">首页</a></li>
+			<span class="fg">|</span>
+			<li class=""><a href="${ctx }/user/search">搜索</a></li>
+		</ul>
 	</footer>
 </body>
 <script src="${ctx}/static/js/jquery.min.js"></script>
 <script src="${ctx}/static/js/script.js"></script>
 <script src="${ctx}/static/js/swiper.min.js"></script>
 <script>
-    
-    $(function(){
-        var mySwiper = new Swiper('.swiper-container', {
-            autoplay: 4000,
-            pagination: '.swiper-pagination',
-            paginationClickable: true,
-            lazyLoading : true,
-        });
-    })
-    
-    function loginOut()
-    {
-    	if(confirm("确认退出吗?"))
-    	{
-    		//window.location.href='${ctx}/user/loginout';
-    		
-    		$.ajax({
-                url: "${ctx}/user/loginout",
-                /* data: { userName: $("#userName").val() ,password:$("#password").val()}, */
-                type: "post",
-                dataType:'json',
-                success: function (data) {
-               		if(data.code==0)
-            		{
-               			window.location.href="${ctx}/user/index";
-            		}
-               		else
-              		{
-              			alert(data.msg);
-              			location.reload();
-              		}
-               		
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert(jqXHR.responseText);
-                }
-            });
-    	}
-    }
+	$(function() {
+		var mySwiper = new Swiper('.swiper-container', {
+			autoplay : 4000,
+			pagination : '.swiper-pagination',
+			paginationClickable : true,
+			lazyLoading : true,
+		});
+	})
+
+	function loginOut() {
+		if (confirm("确认退出吗?")) {
+			//window.location.href='${ctx}/user/loginout';
+
+			$.ajax({
+				url : "${ctx}/user/loginout",
+				/* data: { userName: $("#userName").val() ,password:$("#password").val()}, */
+				type : "post",
+				dataType : 'json',
+				success : function(data) {
+					if (data.code == 0) {
+						window.location.href = "${ctx}/user/index";
+					} else {
+						alert(data.msg);
+						location.reload();
+					}
+
+				},
+				error : function(jqXHR, textStatus, errorThrown) {
+					alert(jqXHR.responseText);
+				}
+			});
+		}
+	}
 </script>
 </html>

@@ -34,3 +34,15 @@ mybaits+tkmybaits+spring+springmvc
 	3.项目导入完毕，按快捷键alt+F5,从maven官网进行jar包的下载，直到项目不报错为止
 	4.修改项目下config.properties中的数据库链接，修改ip以及mysql的用户名密码等信息
 	5.完毕后导入tomcat中，运行即可。
+	
+	
+项目难点或者特点：
+	1.用户下载等信息，可在后台准确查看，谁看了什么书，谁下载了什么书，什么时候下载的，都可以查询的到，不仅仅是在book表中存了一个计数器，而是可以精确查到。
+	2.小说跟小说类比是多对多的关系，也就是说:一本小说可以有多个类别，一个类别可以有多个小说，数据库设计时，采用的是单独一张表进行的维护，前端展示，用的是jquery 的multiSelect技术，美观，实用。
+	3.下载排行和阅读排行等，是采用多表联合查询，并且采用根据人员下载统计表中的count信息进行排序。sql较为复杂:
+		 SELECT s.c_id,s.c_title,s.c_content,s.c_author,s.c_pic,s.c_create_date,s.c_picStr,s.c_admin,s.c_desc FROM (
+SELECT c.*,(SELECT COUNT(*) FROM download d WHERE d.`c_Id`=c.c_id) AS total,
+(SELECT COUNT(*) FROM readcontent r WHERE r.c_id=c.c_id) AS total2 FROM content c 
+) s ORDER BY ${order} ${desc} 
+	4.采用pagehelper，进行mabaits的分页
+	5.实用tk.mybatis.mapper技术，实现基础mybaits方法的免写，如赠删改基础查询等方法，都不需要体现在项目中了
