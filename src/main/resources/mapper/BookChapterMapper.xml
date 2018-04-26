@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhangxin.mybatis.mapper.BookChapterMapper">
+  <resultMap id="BaseResultMap" type="com.zhangxin.mybatis.model.BookChapter">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="b_id" jdbcType="BIGINT" property="bId" />
+    <result column="c_id" jdbcType="BIGINT" property="cId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="c_create_date" jdbcType="TIMESTAMP" property="cCreateDate" />
+    <result column="content" jdbcType="LONGVARBINARY" property="content" />
+  </resultMap>
+</mapper>

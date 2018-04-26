@@ -28,8 +28,8 @@
         <javaClientGenerator targetPackage="com.zhangxin.mybatis.mapper" targetProject="src/main/java"
                              type="XMLMAPPER"/>
 
-        <table tableName="news">
-            <generatedKey column="n_Id" sqlStatement="JDBC"/>
+        <table tableName="recharge">
+            <generatedKey column="r_id" sqlStatement="JDBC"/>
         </table>
     </context>
 </generatorConfiguration>
