@@ -10,4 +10,8 @@ public class StroyContants {
 	
 	
 	public final static String DEFAULT_ROW="10";
+	
+	public final static Integer MAX_ROW=100;
+	
+	public final static String BR="</br>";
 }

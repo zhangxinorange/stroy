@@ -12,6 +12,7 @@
     <result column="m_create_date" jdbcType="TIMESTAMP" property="mCreateDate" />
     <result column="m_type" jdbcType="INTEGER" property="mType" />
      <result column="m_Name" jdbcType="VARCHAR" property="mName" />
+     <result column="m_Score" jdbcType="INTEGER" property="mScore" />
   </resultMap>
   
   

@@ -47,9 +47,9 @@ public class Content {
 
     /**
      * 小说内容
-     */
+     *//*
     @Column(name = "c_content")
-    private byte[] cContent;
+    private byte[] cContent;*/
 
     /**
      * 小说标题图
@@ -144,23 +144,23 @@ public class Content {
         this.cCreateDate = cCreateDate;
     }
 
-    /**
+ /*   *//**
      * 获取小说内容
      *
      * @return c_content - 小说内容
-     */
+     *//*
     public byte[] getcContent() {
         return cContent;
     }
 
-    /**
+    *//**
      * 设置小说内容
      *
      * @param cContent 小说内容
-     */
+     *//*
     public void setcContent(byte[] cContent) {
         this.cContent = cContent;
-    }
+    }*/
 
     /**
      * 获取小说标题图
@@ -240,6 +240,31 @@ public class Content {
 	public void setcAdmin(Long cAdmin) {
 		this.cAdmin = cAdmin;
 	}
+	/***
+	 * 下载消费积分
+	 */
+	private  Integer downScore;
+	/***
+	 * 阅读消费积分
+	 */
+	private Integer readScore;
+
+	public Integer getDownScore() {
+		return downScore;
+	}
+
+	public void setDownScore(Integer downScore) {
+		this.downScore = downScore;
+	}
+
+	public Integer getReadScore() {
+		return readScore;
+	}
+
+	public void setReadScore(Integer readScore) {
+		this.readScore = readScore;
+	}
+	
 	
     
 }

@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
+<c:set var="member" value="${sessionScope.member}" />
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -22,7 +23,7 @@
 </header>
 <!--书籍详情-->
 <div class="recharge-col book-read-box">
-    <h4 class="fz2rem">${content.cTitle }</h4>
+    <h4 class="fz2rem">${book.title }</h4>
     <div>
         <ul class="none flex text-center color-blue">
             <li class="box-flex-1 book-read-setting setting-light"><i class="icon-qingyewan"></i><span>关灯</span></li>
@@ -31,13 +32,13 @@
         </ul>
     </div>
     <article class="" style="line-height: 5rem;">
-    	${content.detailHtml }
+    	${book.contentText }
     </article>
-  <!--   <div class="flex text-center color-white">
-        <a href="#" class="btn-page box-flex-1">上一章</a>
-        <a href="#" class="btn-page box-flex-1">目录</a>
-        <a href="#" class="btn-page box-flex-1">下一章</a>
-    </div> -->
+     <div class="flex text-center color-white">
+        <a href="javascript:goZj(-1);" class="btn-page box-flex-1">上一章</a>
+        <a href="javascript:goZj(0);" class="btn-page box-flex-1">目录</a>
+        <a href="javascript:goZj(1);" class="btn-page box-flex-1">下一章</a>
+    </div> 
 </div>
 <!--推荐书籍
 <div class="recommend mt1rem">
@@ -153,6 +154,38 @@
     function back()
     {
     	window.location.href="${ctx}/user/detail?cId=${content.cId}";
+    }
+    function goZj(n)
+    {
+    	debugger;
+    	if(n==0)
+   		{
+    		window.location.href="${ctx}/user/detail?cId=${content.cId}";
+   		}
+    	else
+   		{
+    		$.ajax({
+                url: "${ctx}/user/searchBid",
+                data: { bId: '${book.bId}' ,type:n},
+                type: "post",
+                dataType:'json',
+                success: function (data) {
+               		if(data.code==0)
+            		{
+               			window.location.href="${ctx}/user/readDetail?bId="+data.data+"&mId=${member.mId}";
+            		}
+               		else
+              		{
+              			alert(data.msg);
+              		}
+               		
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseText);
+                }
+            });
+   		}
+    	
     }
 </script>
 </html>

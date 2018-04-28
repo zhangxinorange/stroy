@@ -28,4 +28,5 @@ public interface ContentService extends IService<Content> {
 	Map selectContentByDownLoad(Integer page,Integer pageSize,boolean isIndex,String order,String desc);
 	
 	String getTypeStrByContentId(Long cId);
+	
 }

@@ -17,7 +17,14 @@ public class ContentTemp {
 	private String cDesc;
 
 	private Date cCreateDate;
-	private byte[] cContent;
+	
+	private  Integer downScore;
+	/***
+	 * 阅读消费积分
+	 */
+	private Integer readScore;
+	
+	/*private byte[] cContent;*/
 
 	private byte[] cPic;
 
@@ -110,25 +117,25 @@ public class ContentTemp {
 	public void setcCreateDate(Date cCreateDate) {
 		this.cCreateDate = cCreateDate;
 	}
-
-	/**
+/*
+	*//**
 	 * 获取小说内容
 	 *
 	 * @return c_content - 小说内容
-	 */
+	 *//*
 	public byte[] getcContent() {
 		return cContent;
 	}
 
-	/**
+	*//**
 	 * 设置小说内容
 	 *
 	 * @param cContent
 	 *            小说内容
-	 */
+	 *//*
 	public void setcContent(byte[] cContent) {
 		this.cContent = cContent;
-	}
+	}*/
 
 	/**
 	 * 获取小说标题图
@@ -219,6 +226,22 @@ public class ContentTemp {
 
 	public void setDetailHtml(String detailHtml) {
 		this.detailHtml = detailHtml;
+	}
+
+	public Integer getDownScore() {
+		return downScore;
+	}
+
+	public void setDownScore(Integer downScore) {
+		this.downScore = downScore;
+	}
+
+	public Integer getReadScore() {
+		return readScore;
+	}
+
+	public void setReadScore(Integer readScore) {
+		this.readScore = readScore;
 	}
 	
 	

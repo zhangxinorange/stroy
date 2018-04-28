@@ -44,7 +44,18 @@ public class Member {
     @Column(name = "m_type")
     private Integer mType;
     
+    @Column(name = "m_Score")
+    private Integer mScore;
+    
   
+
+	public Integer getmScore() {
+		return mScore;
+	}
+
+	public void setmScore(Integer mScore) {
+		this.mScore = mScore;
+	}
 
 	/**
      * @return m_Id

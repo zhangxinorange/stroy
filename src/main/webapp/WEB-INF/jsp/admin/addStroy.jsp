@@ -151,14 +151,14 @@
 											</div>
 										</div>
 
-										<div class="control-group">
+										<!-- <div class="control-group">
 											<label class="control-label" for="textarea2">文章内容</label>
 											<div class="controls">
 												<textarea class="input-xlarge textarea" placeholder="文章内容"
 													id="cContent" name="cContent"
 													style="width: 810px; height: 200px"></textarea>
 											</div>
-										</div>
+										</div> -->
 
 										<div class="form-actions">
 											<button type="button" class="btn btn-primary">保存</button>

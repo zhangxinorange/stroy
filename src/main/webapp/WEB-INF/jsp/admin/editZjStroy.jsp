@@ -18,6 +18,21 @@
             <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]
         <script src="vendors/modernizr-2.6.2-respond-1.1.0.min.js"></script>-->
+        <style type="text/css">
+        	.controlsDel{
+        		position:relative;
+        	}
+        	.controlsDelBtn{
+        		position: absolute;
+				right: 64px;
+				top: 92px;
+        	}
+        	.controlsSaveBtn{
+        		position: absolute;
+				right: 64px;
+				top: 30px;
+        	}
+        </style>
     </head>
     
     <body>
@@ -79,83 +94,45 @@
                         <!-- block -->
                         <div class="block">
                             <div class="navbar navbar-inner block-header">
-                                <div class="muted pull-left">维护文章</div>
+                                <div class="muted pull-left">维护文章章节</div>
                             </div>
                             <div class="block-content collapse in">
                                 <div class="span12">
                                      <form class="form-horizontal" action="${ctx }/stroy/update" method="post" enctype="multipart/form-data" >
-                                      <fieldset>
+                                      <fieldset id="fileSet">
                                         <legend>小说管理</legend>
-                                        <div class="control-group">
-                                          <label class="control-label" for="focusedInput">文章标题</label>
+                                        <div class="control-group" style="border-bottom:1px dashed #ccc;padding-bottom:15px;">
+                                          <label class="control-label" for="focusedInput" >文章标题</label>
                                           <div class="controls">
-                                          <input class="input-xlarge focused" id="cTitle" name="cId" type="hidden" value="${content.cId }">
-                                            <input class="input-xlarge focused" id="cTitle" name="cTitle" type="text" value="${content.cTitle }">
+                                          <input class="input-xlarge focused" id="cId" name="cId" type="hidden" value="${content.cId }">
+                                            <input class="input-xlarge focused" id="cTitle" name="cTitle" type="text" readonly="readonly" value="${content.cTitle }">
                                           </div>
                                         </div>
                                         
-                                        <div class="control-group">
-											<label class="control-label" for="focusedInput">是否下载阅读</label> 
-											<div class="controls">
-												<input class="input-xlarge focused" 
-													name="cAdmin" type="radio" value="0" <c:if test="${content.cAdmin eq 0 }">checked="checked"</c:if> />否
-													&nbsp;
-												<input class="input-xlarge focused" 
-													name="cAdmin" type="radio" value="1" <c:if test="${content.cAdmin eq 1 }">checked="checked"</c:if>/>是
-											</div>
-											
-										</div>
+                                        <div id="detailDiv">
+                                        	
+                                        	
+                                        </div>
                                         
-                                        
-                                        <div class="control-group">
-                                          <label class="control-label" for="focusedInput">文章作者</label>
+                                       <%-- <div class="control-group">
+                                          <label class="control-label" for="focusedInput">章节标题</label>
                                           <div class="controls">
-                                            <input class="input-xlarge focused" id="cAuthor" name="cAuthor" type="text" value="${content.cAuthor }">
+                                            <input class="input-xlarge focused" id="title" name="title" type="text"  value="${content.cTitle }">
                                           </div>
                                         </div>
                                         <div class="control-group">
-                                          <label class="control-label" for="focusedInput">文章简介</label>
-                                          <div class="controls">
-                                            <input class="input-xlarge focused" id="cDesc" name="cDesc" type="text" value="${content.cDesc }">
-                                          </div>
-                                        </div>
-                                        
-                                        
-                                        <div class="control-group">
-                                          <label class="control-label" for="multiSelect">文章类别</label>
-                                          <div class="controls">
-                                            <select multiple="multiple" id="multiSelect"  class="chzn-select span4">
-                                            	<c:forEach items="${tList }" var="type">
-                                            		<option value="${type.tId }">${type.tName }</option>
-                                            	</c:forEach>
-                                            </select>
-                                            <input type="hidden" name="tType" id="tType">
-                                            <p class="help-block">可选择多种类别</p>
-                                          </div>
-
-                                        </div>
-                                        
-                                        
-                                         <div class="control-group">
-                                          <label class="control-label" for="fileInput">标题图</label>
-                                          <div class="controls">
-                                            <input class="input-file uniform_on" id="fileInput" name="cPic" type="file">
-                                          </div>
-                                          <div class="controls">
-                                            <img alt="" src="${ctx }/${content.cPicStr}" style="height: 100px;">
-                                          </div>
-                                        </div>
-                                       
-                                        <%--   <div class="control-group">
                                           <label class="control-label" for="textarea2">文章内容</label>
-                                          <div class="controls">
-                                            <textarea class="input-xlarge textarea" placeholder="文章内容" id="cContent" name="cContent" style="width: 810px; height: 200px" >${content.detail }</textarea>
+                                          <div class="controls controlsDel">
+                                          	 <button type="button" class="btn btn-danger btn-lg controlsDelBtn " onclick="delete('1')">&times;</button>
+                                          	  <button type="button" class="btn primary btn-lg controlsSaveBtn " onclick="save('1')">&times;</button>
+                                            <textarea class="input-xlarge textarea" placeholder="文章内容" id="cContent" name="cContent" style="width: 810px; height: 200px" ></textarea>
                                           </div>
-                                        </div> --%>
+                                        </div>  --%>
                                         
                                          <div class="form-actions">
-                                          <button type="button" class="btn btn-primary">更新</button>
-                                          <button type="reset" class="btn">取消</button>
+                                         <button type="button" class="btn btn-success">添加章节</button>
+                                         <!--  <button type="button" class="btn btn-primary">保存</button> -->
+                                          <button type="reset"  id="goback" class="btn">取消</button>
                                         </div>
                                       </fieldset>
                                     </form>
@@ -259,7 +236,114 @@
             	$("#tType").val(selected);
             	$(".form-horizontal").submit();
             });
+            
+            $("#goback").click(function(){
+            	window.location.href="${ctx}/stroy/list";
+            });
+            
+            
+            $(".btn-success").click(function(){
+            	//debugger;
+            	var size=$("[id^=title]").size();
+            	size++;
+            	var html='<div class="control-group" id="divlabel'+size+'"><label class="control-label" for="focusedInput">章节标题</label>';
+            	html+='<div class="controls"><input class="input-xlarge focused" id="title'+size+'" name="title" type="text"  value="">';
+            	html+='<input  id="id'+size+'" name="id" type="hidden"  value=""> </div></div>';
+            	html+='<div class="control-group" id="divtxt'+size+'"><label class="control-label" for="textarea2">文章内容</label>';
+            	html+='<div class="controls controlsDel"> <button type="button" class="btn btn-danger btn-lg controlsDelBtn " onclick="deleteZj('+size+')">&times;</button>';
+            	html+='<button type="button" class="btn btn-primary  controlsSaveBtn " onclick="saveZj('+size+')">保存</button>'
+            	html+='<textarea class="input-xlarge textarea" placeholder="文章内容" id="content'+size+'" name="cContent" style="width: 810px; height: 200px" ></textarea></div></div>';
+            	$("#detailDiv").append(html);
+            	$('#content'+size+'').wysihtml5();
+            });
+            
+            
+            $.ajax({
+                url: "${ctx}/stroy/readZj",
+                data: { cid: $("#cId").val()},
+                type: "post",
+                dataType:'json',
+                success: function (data) {
+               		if(data.code==0)
+            		{
+               			$("#detailDiv").empty();;
+               			var jsonList=data.data;
+               			$(jsonList).each(function(index,item){ 
+               				var html='<div class="control-group" id="divlabel'+index+'"><label class="control-label" for="focusedInput">章节标题</label>';
+                        	html+='<div class="controls"><input class="input-xlarge focused" id="title'+index+'" name="title" type="text"  value="'+item.title+'">';
+                        	html+='<input  id="id'+index+'" name="id" type="hidden"  value="'+item.bId+'"> </div></div>';
+                        	html+='<div class="control-group" id="divtxt'+index+'"><label class="control-label" for="textarea2">文章内容</label>';
+                        	html+='<div class="controls controlsDel"> <button type="button" class="btn btn-danger btn-lg controlsDelBtn " onclick="deleteZj('+index+')">&times;</button>';
+                        	html+='<button type="button" class="btn btn-primary  controlsSaveBtn " onclick="saveZj('+index+')">保存</button>'
+                        	html+='<textarea class="input-xlarge textarea" placeholder="文章内容" id="content'+index+'" name="cContent" style="width: 810px; height: 200px" >'+item.contentText+'</textarea></div></div>';
+               			
+                        	$("#detailDiv").append(html);
+                        	$('#content'+index+'').wysihtml5();
+               			});
+            		}
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseText);
+                }
+            });
+            
+            
         });
+        
+        function deleteZj(num)
+        {
+        	if(confirm("确定删除此章节吗？"))
+        	{
+	        	var id=$("#id"+num).val();
+	        	if(id!='')
+	        	{
+		        	$.ajax({
+		                url: "${ctx}/stroy/deleteZj",
+		                data: { id: id},
+		                type: "post",
+		                dataType:'json',
+		                success: function (data) {
+		               		if(data.code==0)
+		            		{
+		               			$("#divlabel"+num).remove();
+		               			$("#divtxt"+num).remove();
+		            		}
+		                },
+		                error: function (jqXHR, textStatus, errorThrown) {
+		                    alert(jqXHR.responseText);
+		                }
+		            });
+	        	}
+	        	else
+        		{
+	        		$("#divlabel"+num).remove();
+           			$("#divtxt"+num).remove();
+        		}
+        	}
+        }
+        function saveZj(num)
+        {
+        	var id=$("#id"+num).val();
+        	var title=$("#title"+num).val();
+        	var text=$("#content"+num).val();
+        	
+        	var cId=$("#cId").val();
+        	$.ajax({
+                url: "${ctx}/stroy/saveOrUpdateZj",
+                data: { bid: id,cId:cId,title:title,text:text},
+                type: "post",
+                dataType:'json',
+                success: function (data) {
+               		if(data.code==0)
+            		{
+               			alert("保存成功");
+            		}
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseText);
+                }
+            });
+        }
         </script>
     </body>
 

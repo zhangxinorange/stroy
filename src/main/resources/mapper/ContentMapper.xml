@@ -10,10 +10,12 @@
     <result column="c_author" jdbcType="VARCHAR" property="cAuthor" />
     <result column="c_desc" jdbcType="VARCHAR" property="cDesc" />
     <result column="c_create_date" jdbcType="TIMESTAMP" property="cCreateDate" />
-    <result column="c_content" jdbcType="LONGVARBINARY" property="cContent" />
-    <result column="c_pic" jdbcType="LONGVARBINARY" property="cPic" />
+<!--     <result column="c_content" jdbcType="LONGVARBINARY" property="cContent" />
+ -->    <result column="c_pic" jdbcType="LONGVARBINARY" property="cPic" />
     <result column="c_Admin" jdbcType="BIGINT" property="cAdmin" />
     <result column="c_PicStr" jdbcType="VARCHAR" property="cPicStr" />
+    <result column="down_Score" jdbcType="INTEGER" property="downScore" />
+    <result column="read_Score" jdbcType="INTEGER" property="readScore" />
   </resultMap>
   
   <select id="selectByContent" resultMap="BaseResultMap">
@@ -69,7 +71,7 @@
   	</where>
   </select>
   <select id="selectContentByDownLoad" resultMap="BaseResultMap">
-		  SELECT s.c_id,s.c_title,s.c_content,s.c_author,s.c_pic,s.c_create_date,s.c_picStr,s.c_admin,s.c_desc FROM (
+		  SELECT s.c_id,s.c_title<!-- ,s.c_content -->,s.c_author,s.c_pic,s.c_create_date,s.c_picStr,s.c_admin,s.c_desc FROM (
 SELECT c.*,(SELECT COUNT(*) FROM download d WHERE d.`c_Id`=c.c_id) AS total,
 (SELECT COUNT(*) FROM readcontent r WHERE r.c_id=c.c_id) AS total2 FROM content c 
 ) s ORDER BY ${order} ${desc} 

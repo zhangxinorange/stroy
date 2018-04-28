@@ -50,18 +50,22 @@
    <!--  <div class="text-center book-intro-unfold">展开更多介绍 <i class="icon-xia"></i></div> -->
 </div>
 <!--书籍目录-->
-<!-- <div class="section recharge-col mt1rem book-mulu">
+ <div class="section recharge-col mt1rem book-mulu">
     <h3 class="fz2rem book-detail-titles"><i class="icon-mulu"></i>书籍目录</h3>
     <div class="book-all-mulu color-blue"><i class="icon-xia pull-right"></i>全部章节</div>
     <ul class="none book-mulu-items fz16rem">
-        <li><a href="#">第一章：喜洋洋与灰太狼的爱情故事</a></li>
+    	<c:forEach items="${bookList }" var="book">
+    		<li><a href="javascript:readDetail('${book.bId }');">${book.title}</a></li>
+    		
+    	</c:forEach>
+        <!-- <li><a href="#">第一章：喜洋洋与灰太狼的爱情故事</a></li>
         <li><a href="#">第一章：喜洋洋与灰太狼的爱情故事</a></li>
         <li><a href="#">第一章：喜洋洋与灰太狼的爱情故事</a></li>
         <li><a href="#">第一章：喜洋洋与灰太狼的爱情故事</a></li>    
         <li><a href="#"><i class="icon-vip"></i>第一章：喜洋洋与灰太狼的爱情故事</a></li>
-        <li><a href="#"><i class="icon-vip"></i>第一章：喜洋洋与灰太狼的爱情故事</a></li>        
+        <li><a href="#"><i class="icon-vip"></i>第一章：喜洋洋与灰太狼的爱情故事</a></li>        --> 
     </ul>
-</div> -->
+</div> 
 <!--书籍评论-->
 <div class="section recharge-col mt1rem book-mulu">
     <h3 class="fz2rem book-detail-titles"><i class="icon-mulu"></i>评论</h3>
@@ -166,6 +170,20 @@
  				window.location.href='${ctx}/user/login?url=${content.cId}';
  			}
    		}
+    	else if('${member}'==''&&'${content.downScore}'!='0')
+   		{
+    		if(confirm("小说${content.cTitle}需要${content.downScorw}金币才能下载，您暂时没有足够金币,确定跳转登陆页面吗？"))
+ 			{
+ 				window.location.href='${ctx}/user/login?url=${content.cId}';
+ 			}
+   		}
+    	else if('${member}'!=''&&'${member.mScore}'-'${content.downScore}'<0)
+   		{
+    		if(confirm("小说${content.cTitle}需要${content.downScorw}金币才能下载，您暂时没有足够金币,确定跳转充值页面吗？"))
+ 			{
+ 				window.location.href='${ctx}/user/login?url=${content.cId}';
+ 			}
+   		}
     	else
    		{
     		//$("#dLoadA").attr("target","_blank");
@@ -176,6 +194,9 @@
     
     function read(){
     	window.location.href='${ctx}/user/read?cId=${content.cId}&mId=${member.mId}';
+    }
+    function readDetail(id){
+    	window.location.href='${ctx}/user/readDetail?bId='+id+'&mId=${member.mId}';
     }
     
     function back()

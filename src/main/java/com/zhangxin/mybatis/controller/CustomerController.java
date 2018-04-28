@@ -10,8 +10,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.Validate;
-import org.omg.CORBA.TCKind;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.zhangxin.mybatis.model.BookChapter;
+import com.zhangxin.mybatis.model.BookChapterTemp;
 import com.zhangxin.mybatis.model.Content;
 import com.zhangxin.mybatis.model.ContentTemp;
 import com.zhangxin.mybatis.model.Download;
@@ -29,6 +29,7 @@ import com.zhangxin.mybatis.model.Message;
 import com.zhangxin.mybatis.model.MessageTemp;
 import com.zhangxin.mybatis.model.ReadContent;
 import com.zhangxin.mybatis.model.Type;
+import com.zhangxin.mybatis.service.BookChapterService;
 import com.zhangxin.mybatis.service.ContentService;
 import com.zhangxin.mybatis.service.DownLoadService;
 import com.zhangxin.mybatis.service.INewsService;
@@ -66,6 +67,9 @@ public class CustomerController {
 	
 	@Autowired
 	private MessageService messageService;
+	
+	@Autowired
+	private BookChapterService bookChapterService;
 	
 
 	@RequestMapping(value = { "", "/index" })
@@ -188,13 +192,18 @@ public class CustomerController {
 		Content content = contentService.selectByKey(cId);
 		String type = contentService.getTypeStrByContentId(cId);
 		ModelAndView view = new ModelAndView("/user/book-detail");
+		BookChapter bookChapter=new BookChapter();
+		bookChapter.setcId(cId);
+		List<BookChapter> bookList=bookChapterService.selectByBookChapter(bookChapter, 1, StroyContants.MAX_ROW);
 		view.addObject("content", content);
 		view.addObject("type", type);
+		view.addObject("bookList", bookList);
 		return view;
 	}
 
 	@RequestMapping(value = "/startDownload", method = RequestMethod.GET)
 	public void downLoadFile(HttpServletResponse response, HttpServletRequest request, Long cId,Long mId) {
+		Content content = contentService.selectByKey(cId);
 		Download dContent=new Download();
 		dContent.setcId(cId);
 		dContent.setsId(mId);
@@ -205,14 +214,32 @@ public class CustomerController {
 			if (cList==null||cList.size()==0) {
 				downLoadService.save(dContent);
 			}
+			
+			Member member=memberService.selectByKey(mId);
+			Integer diff=member.getmScore()-content.getDownScore();
+			 
+			member.setmScore(diff);
+			memberService.updateNotNull(member);
+		}
+		StringBuffer sb =new StringBuffer(content.getcTitle()+StroyContants.BR);
+		BookChapter bookChapter=new BookChapter();
+		bookChapter.setcId(cId);
+		List<BookChapter> bList=bookChapterService.selectByBookChapter(bookChapter, 1, StroyContants.MAX_ROW);
+		if (bList!=null && bList.size()>0) {
+			for (BookChapter book : bList) {
+				byte[] b=book.getContent();
+				String title=book.getTitle();
+				String zj=new String(b);
+				sb.append(title+StroyContants.BR);
+				sb.append(zj);
+				sb.append(StroyContants.BR+StroyContants.BR);
+			}
 		}
 		
 		
 		
 		
 		
-		
-		Content content = contentService.selectByKey(cId);
 		OutputStream out = null;
 		try {
 			response.reset();
@@ -226,10 +253,10 @@ public class CustomerController {
 				response.setHeader("Content-Disposition", "attachment;" + "filename="
 						+ new String((content.getcTitle() + ".txt").getBytes("UTF8"), "ISO8859-1"));
 			}
-
+			
 			out = response.getOutputStream();
-			String txt=new String(content.getcContent());
-			txt=StringUtil.delHtmlTag(txt);
+			String txt="";
+			txt=StringUtil.delHtmlTag(sb.toString());
 			out.write(txt.getBytes());
 			out.flush();
 		} catch (IOException e) {
@@ -263,8 +290,35 @@ public class CustomerController {
 		Content content=contentService.selectByKey(cId);
 		ContentTemp temp=new ContentTemp();
 		BeanUtils.copyProperties(content, temp);
-		temp.setDetailHtml(new String(content.getcContent()));
+		temp.setDetailHtml(new String(""));
 		map.put("content", temp);
+		return "/user/readBook";
+	}
+	@RequestMapping(value="/readDetail",method=RequestMethod.GET)
+	public String readDetail(HttpServletRequest request,HttpServletResponse response,Long bId,Long mId,ModelMap map)
+	{
+		if (bId!=null) {
+			BookChapter bookChapter=bookChapterService.selectByKey(bId);
+			Content content=contentService.selectByKey(bookChapter.getcId());
+			ReadContent rContent=new ReadContent();
+			rContent.setcId(bookChapter.getcId());
+			rContent.setmId(mId);
+			if (mId==null) {
+				readService.save(rContent);
+			}else {
+				List<ReadContent> cList=readService.selectByT(rContent);
+				if (cList==null||cList.size()==0) {
+					readService.save(rContent);
+				}
+			}
+			BookChapterTemp temp=new BookChapterTemp();
+			BeanUtils.copyProperties(bookChapter, temp);
+			if (bookChapter.getContent()!=null) {
+				temp.setContentText(new String(bookChapter.getContent()));
+			}
+			map.put("book", temp);
+			map.put("content", content);
+		}
 		return "/user/readBook";
 	}
 
@@ -299,6 +353,48 @@ public class CustomerController {
 			map.put("dList", downList);
 		}
 		return "/user/userCenter";
+	}
+	
+	@RequestMapping(value="/searchBid",method=RequestMethod.POST)
+	@ResponseBody
+	public Result searchBid(Long bId,Integer type)
+	{
+		if (bId!=null) {
+			Long cId=bookChapterService.selectByKey(bId).getcId();
+			BookChapter chapter=new BookChapter();
+			chapter.setcId(cId);
+			List<BookChapter> bList=bookChapterService.selectByBookChapter(chapter, 1, StroyContants.MAX_ROW);
+			if (bList!=null&&bList.size()>0) {
+				int num=0;
+				for (BookChapter bookChapter : bList) {
+					if (bookChapter.getbId().equals(bId)) {
+						break;
+					}
+					num++;
+				}
+				//上一章节
+				if (type.equals(-1)) {
+					if (num>0) {
+						BookChapter bookChapter=bList.get(num-1);
+						return ResultUtil.success(bookChapter.getbId());
+					}
+					else {
+						return ResultUtil.error(1, "已经是第一章节了");
+					}
+				}
+				else {
+					if (num<bList.size()-1) {
+						BookChapter bookChapter=bList.get(num+1);
+						return ResultUtil.success(bookChapter.getbId());
+					}
+					else {
+						return ResultUtil.error(1, "已经是最后一章了,请等待");
+					}
+				}
+			}
+		}
+		
+		return ResultUtil.success();
 	}
 	
 	@RequestMapping(value="/regist",method=RequestMethod.GET)

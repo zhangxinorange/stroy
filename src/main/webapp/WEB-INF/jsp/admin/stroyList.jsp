@@ -103,8 +103,8 @@
 											<th>下载观看</th>
 											<th>简介</th>
 											<th>标题图</th>
-											<th>文章内容</th>
-											<th>操作</th>
+											<th>文章操作</th>
+											<th>章节操作</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -126,16 +126,21 @@
 												<td style="text-align: center;"><img alt=""
 													style="height: 50px;" src="${ctx }/${content.cPicStr}">
 												</td>
-												<td style="width: 20%"><c:if test="${fn:length(content.detail)>12 }">  
-								                         ${fn:substring(content.detail, 0, 12)}...  
-								                   </c:if> <c:if test="${fn:length(content.detail)<=12 }">  
-								                         ${content.detail }  
-                  									 </c:if>
-                  								</td>
+												
 												<td style="text-align: center;">[<a
 													href="${ctx}/stroy/edit?cId=${content.cId}">修改</a>] - [<a
 													href="javascript:deleteContent('${content.cId}');">删除</a>]
 												</td>
+												
+												<td style="width: 10%;text-align: center;"><%-- <c:if test="${fn:length(content.detail)>12 }">  
+								                         ${fn:substring(content.detail, 0, 12)}...  
+								                   </c:if> <c:if test="${fn:length(content.detail)<=12 }">  
+								                         ${content.detail }  
+                  									 </c:if> --%>
+                  									 [<a
+													href="${ctx}/stroy/editZj?cId=${content.cId}">编辑章节</a>]
+                  								</td>
+												
 											</tr>
 										</c:forEach>
 

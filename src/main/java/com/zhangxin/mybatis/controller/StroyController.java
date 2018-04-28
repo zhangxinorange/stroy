@@ -20,20 +20,27 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.github.pagehelper.PageInfo;
+import com.zhangxin.mybatis.model.BookChapter;
+import com.zhangxin.mybatis.model.BookChapterTemp;
 import com.zhangxin.mybatis.model.Content;
 import com.zhangxin.mybatis.model.ContentTemp;
 import com.zhangxin.mybatis.model.ContentType;
 import com.zhangxin.mybatis.model.Type;
+import com.zhangxin.mybatis.service.BookChapterService;
 import com.zhangxin.mybatis.service.ContentService;
 import com.zhangxin.mybatis.service.ContentTypeService;
 import com.zhangxin.mybatis.service.DownLoadService;
 import com.zhangxin.mybatis.service.IReadService;
 import com.zhangxin.mybatis.service.ITypeService;
 import com.zhangxin.mybatis.util.JsonLibUtils;
+import com.zhangxin.mybatis.util.Result;
+import com.zhangxin.mybatis.util.ResultUtil;
+import com.zhangxin.mybatis.util.StringUtil;
 import com.zhangxin.mybatis.util.StroyContants;
 
 @Controller
@@ -56,6 +63,9 @@ public class StroyController {
 	
 	@Autowired
 	private DownLoadService downLoadService;
+	
+	@Autowired
+	private BookChapterService bookChapterService;
 
 	@RequestMapping(value = "/list")
 	public ModelAndView getStroyList(HttpServletRequest request, HttpServletResponse response,
@@ -115,7 +125,7 @@ public class StroyController {
 		content=changePic(content, request);
 		ContentTemp testB = new ContentTemp();
 		BeanUtils.copyProperties(content, testB);
-		testB.setDetail(new String(testB.getcContent()));
+		/*testB.setDetail(new String(testB.getcContent()));*/
 		ModelAndView result = new ModelAndView("/admin/editStroy");
 		result.addObject("content", testB);
 		List<Type> tList=typeService.selectAll();
@@ -134,7 +144,68 @@ public class StroyController {
 		
 		return result;
 	}
+	@RequestMapping(value="editZj",method=RequestMethod.GET)
+	public String editZj(HttpServletRequest request,HttpServletResponse response,ModelMap map,Integer cId)
+	{
+		Content content=contentService.selectByKey(cId);
+		map.put("content", content);
+		return "/admin/editZjStroy";
+	}
 	
+	@RequestMapping(value="/deleteZj",method=RequestMethod.POST)
+	@ResponseBody
+	public Result deleteZj(Integer id)
+	{
+		if (id!=null) {
+			bookChapterService.delete(id);
+		}
+		return ResultUtil.success();
+	}
+	
+	@RequestMapping(value="/saveOrUpdateZj",method=RequestMethod.POST)
+	@ResponseBody
+	public Result saveOrUpdateZj(HttpServletRequest request,HttpServletResponse response,Long bid,String title,Long cId,String text)
+	{
+		BookChapter chapter=new BookChapter();
+		chapter.setbId(bid);
+		chapter.setcId(cId);
+		chapter.setTitle(title);
+		byte[] bytes=null;
+		if (!StringUtil.isEmpty(text)) {
+			bytes=text.getBytes();
+			chapter.setContent(bytes);
+		}
+		if (chapter.getbId()==null) {
+			bookChapterService.save(chapter);
+		}
+		else {
+			bookChapterService.updateNotNull(chapter);
+		}
+		return ResultUtil.success();
+	}
+	@RequestMapping(value="/readZj",method=RequestMethod.POST)
+	@ResponseBody
+	public Result<List<BookChapterTemp>> readZj(Long cid)
+	{
+		List<BookChapterTemp> list=new ArrayList<>();
+		if (cid!=null) {
+			BookChapter bc=new BookChapter();
+			bc.setcId(cid);
+			List<BookChapter> bList=bookChapterService.selectByBookChapter(bc, 1, 100);
+			if (bList!=null&&bList.size()>0) {
+				for (BookChapter bookChapter : bList) {
+					BookChapterTemp chapterTemp=new BookChapterTemp();
+					BeanUtils.copyProperties(bookChapter, chapterTemp);
+					if (bookChapter.getContent()!=null) {
+						chapterTemp.setContentText(new String(bookChapter.getContent()));
+					}
+					list.add(chapterTemp);
+				}
+			}
+		}
+		
+		return ResultUtil.success(list);
+	}
 	
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
@@ -165,7 +236,7 @@ public class StroyController {
 			content.setcPicStr(saveDIr);
 		}
 		if (cContent != null) {
-			content.setcContent(cContent.getBytes());
+			//content.setcContent(cContent.getBytes());
 		}
 		contentService.save(content);
 		contentTypeService.saveMany(content.getcId(), tType);
@@ -201,7 +272,7 @@ public class StroyController {
 			content.setcPicStr(saveDIr);
 		}
 		if (cContent != null) {
-			content.setcContent(cContent.getBytes());
+			//content.setcContent(cContent.getBytes());
 		}
 		contentService.updateNotNull(content);
 		contentTypeService.saveMany(content.getcId(), tType);
@@ -238,9 +309,9 @@ public class StroyController {
 				
 				ContentTemp testB = new ContentTemp();
 				BeanUtils.copyProperties(con, testB);
-				if (testB.getcContent() != null) {
+				/*if (testB.getcContent() != null) {
 					testB.setDetail(new String(testB.getcContent()));
-				}
+				}*/
 				if (testB.getcAdmin()!=null) {
 					if (testB.getcAdmin().equals(Long.valueOf(0))) {
 						testB.setAdminStr("否");
