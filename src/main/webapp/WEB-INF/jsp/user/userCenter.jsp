@@ -44,7 +44,8 @@
     <div class="user-info box-flex-1">
         <p class="none">${member.mName }</p>
         <p class="none">注册时间<fmt:formatDate value="${member.mCreateDate}" pattern="yyyy-MM-dd" /></p>
-        <!-- <p class="none color-vip"><a href="#">成为vip用户</a></p> -->
+         <p class="none">剩余金币:<i style="color: red;font-size: 1.3rem">${member.mScore }</i></p>
+         <p class="none color-vip"><a href="javascript:window.location.href='${ctx }/user/gotoRecharge'">充值</a></p> 
     </div>
 </div>
 <div class="section mt1rem user-link">
@@ -53,7 +54,7 @@
              <i class="icon icon-yuedu"></i>
              <span class="title">我的阅读</span>
              <c:forEach items="${rList}" var="content">
-             	<a href="javascript:window.location.href='${ctx }/user/detail?cId=${content.cId}';"><b class="color-red read-gold">${content.cTitle}</b> </a>
+             	<a href="javascript:window.location.href='${ctx }/user/detail?cId=${content.cId}';"><b class="color-red read-gold">${content.cTitle}</b><i style="color: red;font-size: 1rem">&nbsp;(-${content.readScore }金币)</i> </a>
              </c:forEach>
              <!-- <b class="color-red read-gold">红楼梦</b> 
              <b class="color-red read-gold">呐喊</b>  -->
@@ -63,7 +64,7 @@
                 <i class="icon icon-qianbao1 fz18rem"></i>
                 <span class="title">我的下载</span>
                 <c:forEach items="${dList}" var="content">
-             	<a href="javascript:window.location.href='${ctx }/user/detail?cId=${content.cId}';"><b class="color-red read-gold">${content.cTitle}</b> </a>
+             	<a href="javascript:window.location.href='${ctx }/user/detail?cId=${content.cId}';"><b class="color-red read-gold">${content.cTitle}</b><i style="color: red;font-size: 1rem">&nbsp;(-${content.downScore }金币)</i> </a>
              </c:forEach>
         </li>
        

@@ -210,8 +210,10 @@ public class StroyController {
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public String save(HttpServletRequest request, HttpServletResponse response, String cTitle, String cAuthor,
-			String cDesc, String cContent, MultipartFile cPic,String tType,Long cAdmin) throws Exception {
+			String cDesc, String cContent, MultipartFile cPic,String tType,Long cAdmin,Integer downScore,Integer readScore) throws Exception {
 		Content content = new Content(cTitle, cAuthor, cDesc,cAdmin);
+		content.setDownScore(downScore);
+		content.setReadScore(readScore);
 		if (!cPic.isEmpty() && cPic != null && cPic.getBytes() != null) {
 			content.setcPic(cPic.getBytes());
 
@@ -246,8 +248,10 @@ public class StroyController {
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String update(HttpServletRequest request, HttpServletResponse response, String cTitle, String cAuthor,
-			String cDesc, String cContent, MultipartFile cPic,Long cId,String tType,Long cAdmin) throws Exception {
+			String cDesc, String cContent, MultipartFile cPic,Long cId,String tType,Long cAdmin,Integer downScore,Integer readScore) throws Exception {
 		Content content = new Content(cId,cTitle, cAuthor, cDesc,cAdmin);
+		content.setDownScore(downScore);
+		content.setReadScore(readScore);
 		if (!cPic.isEmpty() && cPic != null && cPic.getBytes() != null) {
 			content.setcPic(cPic.getBytes());
 			// 可以对user做一些操作如存入数据库

@@ -1,19 +1,23 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
+<c:set var="ctx" value="${pageContext.request.contextPath}" />
+<c:set var="member" value="${sessionScope.member}" />
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="format-detection" content="telephone=no"/>
     <title>充值</title>
-    <link rel="stylesheet" href="fonts/iconfont.css"/>
-    <link rel="stylesheet" href="css/style.min.css">
-    <script src="js/loading.js"></script>
+    <link rel="stylesheet" href="${ctx }/static/fonts/iconfont.css"/>
+    <link rel="stylesheet" href="${ctx }/static/css/style.min.css">
+    <script src="${ctx }/static/js/loading.js"></script>
 </head>
 <body>
 <header class="header flex flex-vc">
-    <div class="l"><a href="../index.html"><i class="icon-zhuye1"></i></a></div>
-    <div class="c box-flex-1 text-center"><h1>哈哈哈中午网</h1></div>
-    <div class="r text-right"><a href="login.html"><i class="icon-zhuye"></i></a></div>
+    <div class="l"><a href="${ctx }/user/index"><i class="icon-zhuye1"></i></a></div>
+    <div class="c box-flex-1 text-center"><h1>悦享小说阅读网</h1></div>
+    <div class="r text-right"><a href="${ctx }/user/login"><i class="icon-zhuye"></i></a></div>
 </header>
 <!--充值-->
 <div class="recharge-box">
@@ -21,11 +25,11 @@
         <ul class="none">
             <li class="flex">
                 <span>充值用户：</span>
-                <span class="box-flex-1 text-right">赵日天</span>
+                <span class="box-flex-1 text-right">${member.mName }</span>
             </li>
             <li class="flex">    
-                <span>剩余读书币:</span>
-                <span class="box-flex-1 text-right color-red">0</span>
+                <span>剩余金币:</span>
+                <span class="box-flex-1 text-right color-red">${member.mScore }</span>
             </li>
         </ul>
     </div>
@@ -42,7 +46,7 @@
                     </div>
                     <div class="pay-info box-flex-1">
                         <h4 class="none name">微信支付</h4>
-                        <p class="none bili">1元=100读书币</p>
+                        <p class="none bili">1元=100金币</p>
                     </div>
                 </label>
             </li>
@@ -54,7 +58,7 @@
                     </div>
                     <div class="pay-info box-flex-1">
                         <h4 class="none name">支付宝钱包</h4>
-                        <p class="none bili">1元=100读书币</p>
+                        <p class="none bili">1元=100金币</p>
                     </div>
                 </label>
             </li>
@@ -66,7 +70,7 @@
                     </div>
                     <div class="pay-info box-flex-1">
                         <h4 class="none name">百度钱包</h4>
-                        <p class="none bili">1元=100读书币</p>
+                        <p class="none bili">1元=100金币</p>
                     </div>
                 </label>
             </li>
@@ -105,18 +109,20 @@
     <div class="mt1rem recharge-col recharge-all-price-box">
         <i class="icon-qianbao1"></i>
         <span>充值金额<b class="recharge-all-price fz2rem">30</b>元</span>
-        <span><b class="read-gold">3000</b>读书币</span>
+        <form action="${ctx }/user/rechage" method="post">
+        	<span><b class="read-gold" id="chargeVal" name="chargeVal">3000</b>金币<input type="hidden" id="moneyHi" value="3000"></span>
+        </form>
     </div>
     <div class="recharge-col">
-        <a href="javascript:;" class="btn btn-primary btn-block go-to-recharge">确认充值</a>
+        <a href="javascript:saveMoney();" class="btn btn-primary btn-block go-to-recharge">确认充值</a>
     </div>
     <p class="text-center select-recharge-info">
-         <a href="pay-history.html">查看我的充值记录</a>
+         <a href="javascript: window.location.href='${ctx }/user/searchPay'">查看我的充值记录</a>
     </p>
 </div>
 </body>
-<script src="js/jquery.min.js"></script>
-<script src="js/script.js"></script>
+<script src="${ctx }/static/js/jquery.min.js"></script>
+<script src="${ctx }/static/js/script.js"></script>
 <script>
     $(function(){
     recharge();
@@ -132,6 +138,7 @@ function recharge(){
         var $price = $this.data('price');    //当前选择充值金额
             $all_price.text($price);
             $read_gold.text($price*100);
+            $("#moneyHi").val($price*100);
     });
     //充值
     function go_to_recharge(){
@@ -161,5 +168,35 @@ function recharge(){
     }
     go_to_recharge();
 }
+    
+    function saveMoney()
+    {
+    	var changeVal= $("#moneyHi").val();
+    	$.ajax({
+            url: "${ctx }/user/rechage",
+            data: { chargeVal: changeVal},
+            type: "post",
+            dataType:'json',
+            success: function (data) {
+           		if(data.code==0)
+        		{
+           			if(confirm("充值成功!"))
+         			{
+           				window.location.href="${ctx}/user/gotoRecharge";
+         			}
+           			
+        		}
+           		else
+          		{
+          			alert(data.msg);
+          			//location.reload();
+          		}
+           		
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseText);
+            }
+        }); 
+    }
 </script>
 </html>

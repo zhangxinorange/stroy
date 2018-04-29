@@ -120,6 +120,22 @@
                                           </div>
                                         </div>
                                         
+                                        <div class="control-group">
+											<label class="control-label" for="focusedInput">下载消费金币</label>
+											<div class="controls">
+												<input class="input-xlarge focused" id="downScore" name="downScore"
+													type="number" value="${content.downScore }">
+											</div>
+										</div>
+										
+										<div class="control-group">
+											<label class="control-label" for="focusedInput">阅读消费金币</label>
+											<div class="controls">
+												<input class="input-xlarge focused" id="readScore" name="readScore"
+													type="number" value="${content.readScore }">
+											</div>
+										</div>
+                                        
                                         
                                         <div class="control-group">
                                           <label class="control-label" for="multiSelect">文章类别</label>
@@ -256,10 +272,27 @@
             	$("#multiSelect").each(function () {
             		selected.push($(this).val());
             	});
+            	
+            	if(!isPositiveInteger($("#downScore").val()))
+				{
+					alert("下载金币请输入正整数");
+					return;
+				}
+				if(!isPositiveInteger($("#readScore").val()))
+				{
+					alert("阅读金币请输入正整数");
+					return;
+				}
+				
             	$("#tType").val(selected);
             	$(".form-horizontal").submit();
             });
         });
+        
+        function isPositiveInteger(s){//是否为正整数
+		     var re = /^[0-9]+$/ ;
+		     return re.test(s)
+		 }  
         </script>
     </body>
 

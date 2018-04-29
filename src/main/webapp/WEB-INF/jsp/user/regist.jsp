@@ -76,7 +76,7 @@
     	</br> 
          <div><input type="password" name="mPassword" id="mPassword" class="inp inp-block search-inp" placeholder="密码"/><input type="hidden" name="mType" id="mType" value="1"/></div>
          </br> 
-         <input type="button" class="btn btn-primary btn-block go-to-recharge" id="regist" title="注册" value="注册"></div>
+         <input type="button" class="btn btn-primary btn-block go-to-recharge" id="regist" title="注册即送100金币" value="注册即送100金币"></div>
 	</form>
 </div>
 </body>
@@ -112,7 +112,7 @@
                		if(data.code==0)
             		{
                			//window.location.href="${ctx}/user/index";
-               			confirm("注册成功");
+               			confirm("注册成功,100金币已成功到账");
                			$("#from1").submit();
             		}
                		else

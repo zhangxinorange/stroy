@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.sun.jdi.IntegerType;
 import com.zhangxin.mybatis.model.BookChapter;
 import com.zhangxin.mybatis.model.BookChapterTemp;
 import com.zhangxin.mybatis.model.Content;
@@ -28,12 +29,14 @@ import com.zhangxin.mybatis.model.Member;
 import com.zhangxin.mybatis.model.Message;
 import com.zhangxin.mybatis.model.MessageTemp;
 import com.zhangxin.mybatis.model.ReadContent;
+import com.zhangxin.mybatis.model.Recharge;
 import com.zhangxin.mybatis.model.Type;
 import com.zhangxin.mybatis.service.BookChapterService;
 import com.zhangxin.mybatis.service.ContentService;
 import com.zhangxin.mybatis.service.DownLoadService;
 import com.zhangxin.mybatis.service.INewsService;
 import com.zhangxin.mybatis.service.IReadService;
+import com.zhangxin.mybatis.service.IRechargeService;
 import com.zhangxin.mybatis.service.ITypeService;
 import com.zhangxin.mybatis.service.MemberService;
 import com.zhangxin.mybatis.service.MessageService;
@@ -70,6 +73,10 @@ public class CustomerController {
 	
 	@Autowired
 	private BookChapterService bookChapterService;
+	
+	
+	@Autowired
+	private IRechargeService rechargeService;
 	
 
 	@RequestMapping(value = { "", "/index" })
@@ -213,13 +220,12 @@ public class CustomerController {
 			List<Download> cList=downLoadService.selectByT(dContent);
 			if (cList==null||cList.size()==0) {
 				downLoadService.save(dContent);
+				Member member=memberService.selectByKey(mId);
+				Integer diff=member.getmScore()-content.getDownScore();
+				member.setmScore(diff);
+				memberService.updateNotNull(member);
+				request.getSession().setAttribute(StroyContants.USER_SESSION_key, member);
 			}
-			
-			Member member=memberService.selectByKey(mId);
-			Integer diff=member.getmScore()-content.getDownScore();
-			 
-			member.setmScore(diff);
-			memberService.updateNotNull(member);
 		}
 		StringBuffer sb =new StringBuffer(content.getcTitle()+StroyContants.BR);
 		BookChapter bookChapter=new BookChapter();
@@ -275,6 +281,7 @@ public class CustomerController {
 	@RequestMapping(value="/read",method=RequestMethod.GET)
 	public String readBook(HttpServletRequest request,HttpServletResponse response,Long cId,ModelMap map,Long mId)
 	{
+		Content content=contentService.selectByKey(cId);
 		ReadContent rContent=new ReadContent();
 		rContent.setcId(cId);
 		rContent.setmId(mId);
@@ -283,11 +290,22 @@ public class CustomerController {
 		}else {
 			List<ReadContent> cList=readService.selectByT(rContent);
 			if (cList==null||cList.size()==0) {
+				//保存记录
 				readService.save(rContent);
+				
+				//更新消费
+				Member member=memberService.selectByKey(mId);
+				Integer memberScore=member.getmScore();
+				Integer cScore=content.getReadScore();
+				Integer diff=memberScore-cScore;
+				member.setmScore(diff);
+				memberService.updateNotNull(member);
+				request.getSession().setAttribute(StroyContants.USER_SESSION_key, member);
 			}
+			
 		}
 		
-		Content content=contentService.selectByKey(cId);
+		
 		ContentTemp temp=new ContentTemp();
 		BeanUtils.copyProperties(content, temp);
 		temp.setDetailHtml(new String(""));
@@ -309,6 +327,15 @@ public class CustomerController {
 				List<ReadContent> cList=readService.selectByT(rContent);
 				if (cList==null||cList.size()==0) {
 					readService.save(rContent);
+					
+					Member member=memberService.selectByKey(mId);
+					Integer memberScore=member.getmScore();
+					Integer cScore=content.getReadScore();
+					Integer diff=memberScore-cScore;
+					member.setmScore(diff);
+					memberService.updateNotNull(member);
+					request.getSession().setAttribute(StroyContants.USER_SESSION_key, member);
+					
 				}
 			}
 			BookChapterTemp temp=new BookChapterTemp();
@@ -459,5 +486,52 @@ public class CustomerController {
 			}
 		}
 		return ResultUtil.success(tList);
+	}
+	@RequestMapping(value="/gotoRecharge",method=RequestMethod.GET)
+	public String gotoRecharge(HttpServletRequest request,HttpServletResponse response,ModelMap map)
+	{
+		Member member=((Member)request.getSession().getAttribute(StroyContants.USER_SESSION_key));
+		if (member==null) {
+			return "/user/login";
+		}
+		Long mId=member.getmId();
+		Member membe=memberService.selectByKey(mId);
+		request.getSession().setAttribute(StroyContants.USER_SESSION_key, membe);
+		
+		return "/user/recharge";
+	}
+	@RequestMapping(value="/rechage",method=RequestMethod.POST)
+	public @ResponseBody Result rechage(HttpServletRequest request,Integer chargeVal)
+	{
+		Long mId=((Member)request.getSession().getAttribute(StroyContants.USER_SESSION_key)).getmId();
+		Recharge recharge=new Recharge();
+		Member member=memberService.selectByKey(mId);
+		if(chargeVal==null)
+		{
+			return ResultUtil.error(2, "充值失败");
+		}
+		recharge.setTotal(chargeVal.doubleValue());
+		recharge.setUserId(mId);
+		rechargeService.save(recharge);
+		
+		Integer total=member.getmScore()+chargeVal;
+		member.setmScore(total);
+		memberService.updateNotNull(member);
+		
+		return ResultUtil.success();
+	}
+	@RequestMapping("/searchPay")
+	public String searchPay(HttpServletRequest request,HttpServletResponse response,ModelMap map)
+	{
+		Member member=(Member)request.getSession().getAttribute(StroyContants.USER_SESSION_key);
+		if (member==null) {
+			return "redirect:/user/login";
+		}
+		Long mId=member.getmId();
+		Recharge recharge=new Recharge();
+		recharge.setUserId(mId);
+		List<Recharge> rList=rechargeService.selectByRecharge(recharge, 1, StroyContants.MAX_ROW);
+		map.put("rList", rList);
+		return "/user/pay-history";
 	}
 }

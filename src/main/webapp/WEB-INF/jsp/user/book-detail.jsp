@@ -37,9 +37,9 @@
     </div>
 </div>
  <div class="section flex recharge-col book-operation">
-    <a id="dLoadA" href="javascript:download();" class="btn btn-primary box-flex-1"><i class="icon-kongxin"></i>下载图书</a>
+    <a id="dLoadA" href="javascript:download();" class="btn btn-primary box-flex-1"><i class="icon-kongxin"></i>下载图书<font color="red">(消费金币:${content.downScore })</font></a>
     <span class="fg"></span>
-    <a href="javascript:read();" class="btn btn-success box-flex-1"><i class="icon-chakan"></i>开始阅读</a>
+    <a href="javascript:read();" class="btn btn-success box-flex-1"><i class="icon-chakan"></i>开始阅读<font color="red">(消费金币:${content.readScore })</font></a>
 </div> 
 <!--书籍简介-->
 <div class="section recharge-col book-intro">
@@ -172,31 +172,75 @@
    		}
     	else if('${member}'==''&&'${content.downScore}'!='0')
    		{
-    		if(confirm("小说${content.cTitle}需要${content.downScorw}金币才能下载，您暂时没有足够金币,确定跳转登陆页面吗？"))
+    		if(confirm("小说${content.cTitle}需要${content.downScore}金币才能下载，您暂时没有足够金币,确定跳转登陆页面吗？"))
  			{
  				window.location.href='${ctx}/user/login?url=${content.cId}';
  			}
    		}
-    	else if('${member}'!=''&&'${member.mScore}'-'${content.downScore}'<0)
+    	else if('${member}'!=''&&  ${member.mScore}-${content.downScore}<0)
    		{
-    		if(confirm("小说${content.cTitle}需要${content.downScorw}金币才能下载，您暂时没有足够金币,确定跳转充值页面吗？"))
+    		if(confirm("小说${content.cTitle}需要${content.downScore}金币才能下载，您暂时没有足够金币,确定跳转充值页面吗？"))
  			{
- 				window.location.href='${ctx}/user/login?url=${content.cId}';
+ 				window.location.href='${ctx}/user/gotoRecharge';
  			}
    		}
     	else
    		{
-    		//$("#dLoadA").attr("target","_blank");
-    		//window.location.href='${ctx}/user/startDownload?cId=${content.cId}';
+    		/* if('${member}'=='' && ${content.downScore}==0)
+   			{
+   				window.open('${ctx}/user/startDownload?cId=${content.cId}&mId=${member.mId}','_blank');
+   			}
+    		else
+   			{
+   			
+   			}
+    		if(${content.downScore}!=0 && confirm("下载此小说需要花费${content.downScore}金币,您当前的")) */
+    			
     		window.open('${ctx}/user/startDownload?cId=${content.cId}&mId=${member.mId}','_blank');
    		}
     }
     
     function read(){
-    	window.location.href='${ctx}/user/read?cId=${content.cId}&mId=${member.mId}';
+    	if('${member}'==''&&'${content.readScore}'!='0')
+   		{
+    		if(confirm("小说${content.cTitle}需要${content.readScore}金币才能阅读，您暂时没有足够金币,确定跳转登陆页面吗？"))
+ 			{
+ 				window.location.href='${ctx}/user/login?url=${content.cId}';
+ 			}
+   		}
+    	else if ('${member}'!=''&&  ${member.mScore}-${content.readScore}<0)
+   		{
+    		if(confirm("小说${content.cTitle}需要${content.readScore}金币才能阅读，您暂时没有足够金币,确定跳转充值页面吗？"))
+ 			{
+ 				window.location.href='${ctx}/user/gotoRecharge';
+ 			}
+   		}
+    	else
+   		{
+    		window.location.href='${ctx}/user/read?cId=${content.cId}&mId=${member.mId}';
+   		}
+    	
     }
     function readDetail(id){
-    	window.location.href='${ctx}/user/readDetail?bId='+id+'&mId=${member.mId}';
+    	debugger;
+    	if('${member}'==''&&'${content.readScore}'!='0')
+   		{
+    		if(confirm("小说${content.cTitle}需要${content.downScore}金币才能阅读，您暂时没有足够金币,确定跳转登陆页面吗？"))
+ 			{
+ 				window.location.href='${ctx}/user/login?url=${content.cId}';
+ 			}
+   		}
+    	else if ('${member}'!=''&&  ${member.mScore}-${content.readScore}<0)
+   		{
+    		if(confirm("小说${content.cTitle}需要${content.readScore}金币才能阅读，您暂时没有足够金币,确定跳转充值页面吗？"))
+ 			{
+ 				window.location.href='${ctx}/user/gotoRecharge';
+ 			}
+   		}
+    	else
+   		{
+    		window.location.href='${ctx}/user/readDetail?bId='+id+'&mId=${member.mId}';
+   		}
     }
     
     function back()

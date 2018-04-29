@@ -126,6 +126,23 @@
 													type="text" value="${content.cDesc }">
 											</div>
 										</div>
+										
+										<div class="control-group">
+											<label class="control-label" for="focusedInput">下载消费金币</label>
+											<div class="controls">
+												<input class="input-xlarge focused" id="downScore" name="downScore"
+													type="number" value="0">
+											</div>
+										</div>
+										
+										<div class="control-group">
+											<label class="control-label" for="focusedInput">阅读消费金币</label>
+											<div class="controls">
+												<input class="input-xlarge focused" id="readScore" name="readScore"
+													type="number" value="0">
+											</div>
+										</div>
+										
 										<div class="control-group">
 											<label class="control-label" for="multiSelect">文章类别</label>
 											<div class="controls">
@@ -251,7 +268,18 @@
 					alert("文章标题不能为空");
 					return;
 				}
-
+				
+				if(!isPositiveInteger($("#downScore").val()))
+				{
+					alert("下载金币请输入正整数");
+					return;
+				}
+				if(!isPositiveInteger($("#readScore").val()))
+				{
+					alert("阅读金币请输入正整数");
+					return;
+				}
+				
 				var selected = [];
 				$("#multiSelect").each(function() {
 					selected.push($(this).val());
@@ -261,6 +289,10 @@
 				$(".form-horizontal").submit();
 			});
 		});
+		function isPositiveInteger(s){//是否为正整数
+		     var re = /^[0-9]+$/ ;
+		     return re.test(s)
+		 }  
 	</script>
 </body>
 
