@@ -7,6 +7,8 @@
 		<result column="c_id" jdbcType="BIGINT" property="cId" />
 		<result column="m_id" jdbcType="BIGINT" property="mId" />
 		<result column="r_create_Date" jdbcType="TIMESTAMP" property="rCreateDate" />
+		<result column="r_bId" jdbcType="BIGINT" property="rBId" />
+		<result column="r_point" jdbcType="DOUBLE" property="rPoint" />
 	</resultMap>
 	
 	<resultMap id="BaseResultMap_1" type="com.zhangxin.mybatis.model.ReadContentTemp">

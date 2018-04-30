@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.sun.jdi.IntegerType;
 import com.zhangxin.mybatis.model.BookChapter;
 import com.zhangxin.mybatis.model.BookChapterTemp;
@@ -195,7 +196,7 @@ public class CustomerController {
 	}
 
 	@RequestMapping(value = "/detail", method = RequestMethod.GET)
-	public ModelAndView gotoDetailBook(HttpServletRequest request, HttpServletResponse response, Long cId) {
+	public ModelAndView gotoDetailBook(HttpServletRequest request, HttpServletResponse response, Long cId,Long bId,Double poi) {
 		Content content = contentService.selectByKey(cId);
 		String type = contentService.getTypeStrByContentId(cId);
 		ModelAndView view = new ModelAndView("/user/book-detail");
@@ -205,6 +206,28 @@ public class CustomerController {
 		view.addObject("content", content);
 		view.addObject("type", type);
 		view.addObject("bookList", bookList);
+		
+		if (bId!=null&&poi!=null) {
+			Member member=(Member)request.getSession().getAttribute(StroyContants.USER_SESSION_key);
+			if (member!=null) {
+				ReadContent readContent=new ReadContent();
+				readContent.setmId(member.getmId());
+				readContent.setcId(cId);
+				List<ReadContent> rList=readService.selectByT(readContent);
+				if (rList!=null&&rList.size()>0) {
+					readContent=rList.get(0);
+					readContent.setrBId(bId);
+					readContent.setrPoint(poi);
+					readService.updateNotNull(readContent);
+				}
+				else {
+					readContent.setrBId(bId);
+					readContent.setrPoint(poi);
+					readService.save(readContent);
+				}
+			}
+		}
+		
 		return view;
 	}
 
@@ -227,21 +250,21 @@ public class CustomerController {
 				request.getSession().setAttribute(StroyContants.USER_SESSION_key, member);
 			}
 		}
-		StringBuffer sb =new StringBuffer(content.getcTitle()+StroyContants.BR);
+		StringBuffer sb =new StringBuffer("<html><body><h1>"+content.getcTitle()+"</h1>"+StroyContants.BR);
 		BookChapter bookChapter=new BookChapter();
 		bookChapter.setcId(cId);
 		List<BookChapter> bList=bookChapterService.selectByBookChapter(bookChapter, 1, StroyContants.MAX_ROW);
 		if (bList!=null && bList.size()>0) {
 			for (BookChapter book : bList) {
 				byte[] b=book.getContent();
-				String title=book.getTitle();
+				String title="<h2>"+book.getTitle()+"</h2>"+StroyContants.BR+StroyContants.BR;
 				String zj=new String(b);
 				sb.append(title+StroyContants.BR);
 				sb.append(zj);
 				sb.append(StroyContants.BR+StroyContants.BR);
 			}
 		}
-		
+		sb.append("</body></html>");
 		
 		
 		
@@ -254,15 +277,15 @@ public class CustomerController {
 			// content.getcTitle()+".txt");
 			if (request.getHeader("User-Agent").toUpperCase().indexOf("MSIE") > 0) {
 				response.setHeader("Content-Disposition", "attachment;" + "filename="
-						+ new String((content.getcTitle() + ".txt").getBytes("GBK"), "ISO8859-1"));
+						+ new String((content.getcTitle() + ".html").getBytes("GBK"), "ISO8859-1"));
 			} else {// firefox、chrome、safari、opera
 				response.setHeader("Content-Disposition", "attachment;" + "filename="
-						+ new String((content.getcTitle() + ".txt").getBytes("UTF8"), "ISO8859-1"));
+						+ new String((content.getcTitle() + ".html").getBytes("UTF8"), "ISO8859-1"));
 			}
 			
 			out = response.getOutputStream();
 			String txt="";
-			txt=StringUtil.delHtmlTag(sb.toString());
+			txt=sb.toString();
 			out.write(txt.getBytes());
 			out.flush();
 		} catch (IOException e) {
@@ -302,6 +325,20 @@ public class CustomerController {
 				memberService.updateNotNull(member);
 				request.getSession().setAttribute(StroyContants.USER_SESSION_key, member);
 			}
+			else {
+				ReadContent readContent=cList.get(0);
+				Long bId=readContent.getrBId();
+				if (bId!=null) {
+					BookChapter bookChapter=bookChapterService.selectByKey(bId);
+					BookChapterTemp temp=new BookChapterTemp();
+					BeanUtils.copyProperties(bookChapter, temp);
+					if (bookChapter.getContent()!=null) {
+						temp.setContentText(new String(bookChapter.getContent()));
+					}
+					map.put("book", temp);
+					map.put("poi", readContent.getrPoint());
+				}
+			}
 			
 		}
 		
@@ -326,7 +363,10 @@ public class CustomerController {
 			}else {
 				List<ReadContent> cList=readService.selectByT(rContent);
 				if (cList==null||cList.size()==0) {
+					rContent.setrBId(bId);
 					readService.save(rContent);
+					map.put("poi", 0);
+					
 					
 					Member member=memberService.selectByKey(mId);
 					Integer memberScore=member.getmScore();
@@ -336,6 +376,18 @@ public class CustomerController {
 					memberService.updateNotNull(member);
 					request.getSession().setAttribute(StroyContants.USER_SESSION_key, member);
 					
+				}
+				else {
+					rContent.setrBId(bId);
+					readService.updateNotNull(rContent);
+					//如果当前查看的章节是阅读的章节，那么显示阅读的章节阅读量，如果不是，那么显示顶部
+					rContent=cList.get(0);
+					if (rContent.getrBId().equals(bId)) {
+						map.put("poi", rContent.getrPoint());
+					}
+					else {
+						map.put("poi", 0);
+					}
 				}
 			}
 			BookChapterTemp temp=new BookChapterTemp();
@@ -533,5 +585,13 @@ public class CustomerController {
 		List<Recharge> rList=rechargeService.selectByRecharge(recharge, 1, StroyContants.MAX_ROW);
 		map.put("rList", rList);
 		return "/user/pay-history";
+	}
+	@RequestMapping(value="/updatePoi",method=RequestMethod.POST)
+	public @ResponseBody Result updatePoi(Long bId,Double poi)
+	{
+		if (bId!=null) {
+			
+		}
+		return ResultUtil.success();
 	}
 }

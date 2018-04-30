@@ -100,4 +100,35 @@ public class ReadContent {
     public void setrCreateDate(Date rCreateDate) {
         this.rCreateDate = rCreateDate;
     }
+    
+    /****
+     * 阅读章节
+     */
+    @Column(name = "r_bId")
+    private Long rBId;
+    
+    /***
+     * 阅读百分比
+     */
+    @Column(name = "r_point")
+    private Double rPoint;
+
+	public Long getrBId() {
+		return rBId;
+	}
+
+	public void setrBId(Long rBId) {
+		this.rBId = rBId;
+	}
+
+	public Double getrPoint() {
+		return rPoint;
+	}
+
+	public void setrPoint(Double rPoint) {
+		this.rPoint = rPoint;
+	}
+    
+    
+    
 }
