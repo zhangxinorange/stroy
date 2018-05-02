@@ -46,3 +46,8 @@ SELECT c.*,(SELECT COUNT(*) FROM download d WHERE d.`c_Id`=c.c_id) AS total,
 ) s ORDER BY ${order} ${desc} 
 	4.采用pagehelper，进行mabaits的分页
 	5.实用tk.mybatis.mapper技术，实现基础mybaits方法的免写，如赠删改基础查询等方法，都不需要体现在项目中了
+	
+	
+	
+说明：
+	断点查看小说进度功能，需要点击页面上右侧的目录按钮，才能实现，点击浏览器的返回按钮，不能实现保存进度的功能。

@@ -224,7 +224,7 @@
     function readDetail(id){
     	if('${member}'==''&&'${content.readScore}'!='0')
    		{
-    		if(confirm("小说${content.cTitle}需要${content.downScore}金币才能阅读，您暂时没有足够金币,确定跳转登陆页面吗？"))
+    		if(confirm("小说${content.cTitle}需要${content.readScore}金币才能阅读，您暂时没有足够金币,确定跳转登陆页面吗？"))
  			{
  				window.location.href='${ctx}/user/login?url=${content.cId}';
  			}

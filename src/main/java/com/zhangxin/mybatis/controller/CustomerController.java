@@ -324,6 +324,24 @@ public class CustomerController {
 				member.setmScore(diff);
 				memberService.updateNotNull(member);
 				request.getSession().setAttribute(StroyContants.USER_SESSION_key, member);
+				
+				
+				
+				BookChapter chapter=new BookChapter();
+				chapter.setcId(cId);
+				List<BookChapter> bList=bookChapterService.selectByBookChapter(chapter, 1, StroyContants.MAX_ROW);
+				if (bList!=null&&bList.size()>0) {
+					BookChapter bookChapter=bList.get(0);
+					BookChapterTemp temp=new BookChapterTemp();
+					BeanUtils.copyProperties(bookChapter, temp);
+					if (bookChapter.getContent()!=null) {
+						temp.setContentText(new String(bookChapter.getContent()));
+					}
+					map.put("book", temp);
+					map.put("poi", 0);
+				}
+				
+				
 			}
 			else {
 				ReadContent readContent=cList.get(0);
@@ -337,6 +355,22 @@ public class CustomerController {
 					}
 					map.put("book", temp);
 					map.put("poi", readContent.getrPoint());
+				}
+				//第一次没有阅读过
+				else {
+					BookChapter chapter=new BookChapter();
+					chapter.setcId(cId);
+					List<BookChapter> bList=bookChapterService.selectByBookChapter(chapter, 1, StroyContants.MAX_ROW);
+					if (bList!=null&&bList.size()>0) {
+						BookChapter bookChapter=bList.get(0);
+						BookChapterTemp temp=new BookChapterTemp();
+						BeanUtils.copyProperties(bookChapter, temp);
+						if (bookChapter.getContent()!=null) {
+							temp.setContentText(new String(bookChapter.getContent()));
+						}
+						map.put("book", temp);
+						map.put("poi", 0);
+					}
 				}
 			}
 			
@@ -382,7 +416,7 @@ public class CustomerController {
 					readService.updateNotNull(rContent);
 					//如果当前查看的章节是阅读的章节，那么显示阅读的章节阅读量，如果不是，那么显示顶部
 					rContent=cList.get(0);
-					if (rContent.getrBId().equals(bId)) {
+					if (rContent.getrBId()!=null&&rContent.getrBId().equals(bId)) {
 						map.put("poi", rContent.getrPoint());
 					}
 					else {
@@ -486,6 +520,7 @@ public class CustomerController {
 	@RequestMapping(value="/regist",method=RequestMethod.POST)
 	public String regist(HttpServletRequest request,HttpServletResponse response,Member member)
 	{
+		member.setmScore(100);
 		memberService.save(member);
 		request.getSession().removeAttribute(StroyContants.USER_SESSION_key);
 		return "redirect:/user/login";
